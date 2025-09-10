@@ -16,55 +16,28 @@
       <circle cx="12" cy="7.2" r="1.6"></circle>
     </svg>
     <div>
-      <h1>Banco de Semillas</h1><small class="subtitle">Invernadero — Liceo San Nicolás</small>
+      <h1>Banco de Semillas</h1>
       <small id="today"></small>
     </div>
   </div>
 
   <div class="actions">
-    <button class="tab green has-tip" id="btn-add" data-tip="Ingresar una nueva variedad de semilla"><svg viewBox="0 0 24 24" aria-hidden="true">
-  <defs>
-    <linearGradient id="g-seed" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#a1ff7a"/><stop offset="1" stop-color="#22c55e"/>
-    </linearGradient>
-  </defs>
-  <path fill="url(#g-seed)" d="M12 22c4-4 6-8 6-12a6 6 0 0 0-12 0c0 4 2 8 6 12z"/>
-</svg><span class="label">Añadir semilla</span>
+    <button class="btn grad-green" id="btn-add">
       <span class="icon">🌱</span> Añadir semilla
     </button>
-    <button class="tab primary has-tip" id="btn-import" data-tip="Cargar semillas desde un archivo CSV (Google Sheets)"><svg viewBox="0 0 24 24">
-  <defs><linearGradient id="g-import" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#4cc9f0"/><stop offset="1" stop-color="#705CFF"/></linearGradient></defs>
-  <path fill="url(#g-import)" d="M5 20h14v-2H5v2zm7-16l-5 5h3v4h4v-4h3l-5-5z"/>
-</svg><span class="label">Importar CSV</span>
+    <button class="btn grad-blue" id="btn-import">
       <span class="icon">📥</span> Importar CSV
     </button>
-    <button class="tab orange has-tip" id="btn-export" data-tip="Descargar todas las semillas en formato CSV"><svg viewBox="0 0 24 24">
-  <defs><linearGradient id="g-export" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#ffd166"/><stop offset="1" stop-color="#f59e0b"/></linearGradient></defs>
-  <path fill="url(#g-export)" d="M19 12l-5-5v3H8v4h6v3l5-5zM5 20h14v-2H5v2z"/>
-</svg><span class="label">Exportar CSV</span>
+    <button class="btn grad-orange" id="btn-export">
       <span class="icon">📤</span> Exportar CSV
     </button>
-    <button class="tab has-tip" id="btn-calendar" data-tip="Ver resumen por mes de siembras recomendadas (6 meses)"><svg viewBox="0 0 24 24">
-  <defs><linearGradient id="g-cal" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#a78bfa"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
-  <path fill="url(#g-cal)" d="M7 2h2v2h6V2h2v2h3v16H4V4h3V2zm12 6H5v10h14V8z"/>
-</svg><span class="label">Calendario</span>
+    <button class="btn grad-purple" id="btn-calendar">
       <span class="icon">📅</span> Calendario de siembras
     </button>
-    <button class="tab pink has-tip" id="btn-reset" data-tip="Reiniciar búsqueda y filtros"><svg viewBox="0 0 24 24">
-  <defs><linearGradient id="g-broom" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#ff7eb6"/><stop offset="1" stop-color="#ff3d77"/></linearGradient></defs>
-  <path fill="url(#g-broom)" d="M15 3l6 6-2 2-6-6 2-2zM3 21l6-2 7-7-4-4-7 7-2 6z"/>
-</svg><span class="label">Limpiar filtros</span>
+    <button class="btn grad-teal" id="btn-reset">
       <span class="icon">🧹</span> Limpiar filtro
     </button>
-    <button class="tab has-tip" id="btn-theme" data-tip="Cambiar entre tema claro/oscuro"><svg viewBox="0 0 24 24">
-  <defs><linearGradient id="g-theme" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0" stop-color="#4cc9f0"/><stop offset="1" stop-color="#a1ff7a"/></linearGradient></defs>
-  <path fill="url(#g-theme)" d="M12 3a9 9 0 106 15.9A9 9 0 0012 3z"/>
-</svg><span class="label">Tema</span>
+    <button class="btn grad-pink" id="btn-theme">
       <span class="icon">🌓</span> Tema
     </button>
     <input type="file" id="file-input" accept=".csv" hidden />
@@ -99,9 +72,6 @@
         <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
         <option>Flor</option><option>Legumbre/Grano</option><option>Nativo</option>
       </select>
-      <select id="f-familia" class="select">
-        <option value="">Familia (todas)</option>
-      </select>
       <select id="f-ciclo" class="select">
         <option value="">Ciclo (todos)</option>
         <option>Anual</option><option>Bianual</option><option>Perenne</option>
@@ -111,7 +81,7 @@
         <option value="siembra">En época de siembra</option>
         <option value="transplante">En época de trasplante</option>
       </select>
-      <button class="tab primary" id="btn-aplicar"><span class="icon i-play"></span><span class="label">Aplicar</span></button>
+      <button class="btn grad-teal" id="btn-aplicar">Aplicar</button>
     </div>
     <div class="row wrap">
       <label class="chip"><input type="checkbox" id="c-invernadero"/> Invernadero</label>
@@ -135,7 +105,6 @@
       <div class="table-head">
         <div>Nombre común</div>
         <div>Nombre científico</div>
-        <div>Familia</div>
         <div>Tipo</div>
         <div>Siembra</div>
         <div>Germinación</div>
@@ -210,8 +179,8 @@
       <label class="check"><input type="checkbox" id="propia"/> Semilla propia</label>
     </div>
     <menu class="modal-actions">
-      <button type="reset" class="tab has-tip" id="btn-cancel" data-tip="Cerrar sin guardar cambios">Cancelar</button>
-      <button type="submit" class="tab green has-tip" id="btn-save" data-tip="Guardar la semilla en el banco">Guardar</button>
+      <button type="reset" class="btn ghost" id="btn-cancel">Cancelar</button>
+      <button type="submit" class="btn grad-green" id="btn-save">Guardar</button>
     </menu>
   </form>
 </dialog>
@@ -220,7 +189,6 @@
   <div class="row">
     <div class="cell nombre"></div>
     <div class="cell cientifico"></div>
-    <div class="cell familia"></div>
     <div class="cell tipo"></div>
     <div class="cell siembra"></div>
     <div class="cell germ"></div>

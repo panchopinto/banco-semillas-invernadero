@@ -49,7 +49,6 @@ function splitCSVLine(line){
 
 // UI
 function render(){
-  populateFamilias();
   // KPIs
   $("#kpi-total").textContent = DB.length;
   $("#kpi-stock").textContent = DB.reduce((a,b)=>a+(+b.stock||0),0);
@@ -67,11 +66,8 @@ function render(){
     el.querySelector(".row").dataset.id = item.id;
     el.querySelector(".nombre").textContent = item.nombre;
     el.querySelector(".cientifico").textContent = item.cientifico || "—";
-    el.querySelector(".familia").textContent = item.familia || "—";
     el.querySelector(".tipo").innerHTML = badge(item.tipo);
-    const inSeason = inMonthRange(new Date(), item.siembra);
-    el.querySelector(".siembra").innerHTML = (item.siembra || "—") + (item.siembra? ` <span class="flag ${inSeason? 'ok':'warn'}">${inSeason? 'en época':'fuera de época'}</span>` : "");
-    if(inSeason) el.querySelector(".row").classList.add("inseason");
+    el.querySelector(".siembra").textContent = item.siembra || "—";
     el.querySelector(".germ").textContent = (item.germinacion||"—")+" días";
     el.querySelector(".profdist").textContent = (item.prof||"—")+"cm / "+(item.dist||"—")+"cm";
     el.querySelector(".riego").textContent = item.riego || "—";
@@ -93,15 +89,6 @@ function badge(txt){
   const cls = colors[txt] || "ok";
   return `<span class="badge ${cls}">${txt}</span>`;
 }
-
-function populateFamilias(){
-  const sel = $("#f-familia");
-  if(!sel) return;
-  const cur = sel.value;
-  const fams = Array.from(new Set(DB.map(s=>s.familia).filter(Boolean))).sort();
-  sel.innerHTML = '<option value="">Familia (todas)</option>' + fams.map(f=>`<option ${f===cur?'selected':''}>${f}</option>`).join('');
-}
-
 function groupCount(arr,key){
   return arr.reduce((m,o)=> (m[o[key]]=(m[o[key]]||0)+1, m), {});
 }
@@ -110,7 +97,6 @@ function filtered(arr){
   const q = $("#q").value.trim().toLowerCase();
   const tipo = $("#f-tipo").value;
   const ciclo = $("#f-ciclo").value;
-  const familia = $("#f-familia").value;
   const epoca = $("#f-epoca").value;
   const cInv = $("#c-invernadero").checked;
   const cExt = $("#c-exterior").checked;
@@ -122,7 +108,6 @@ function filtered(arr){
     if(q && !JSON.stringify(s).toLowerCase().includes(q)) return false;
     if(tipo && s.tipo !== tipo) return false;
     if(ciclo && s.ciclo !== ciclo) return false;
-    if(familia && s.familia !== familia) return false;
     if(epoca==="siembra" && !inMonthRange(new Date(), s.siembra)) return false;
     if(epoca==="transplante" && !inMonthRange(new Date(), s.trasplante)) return false;
     if(cInv && !/invernadero/i.test(s.notas+s.reco+s.ubicacion)) return false;
@@ -252,7 +237,7 @@ $("#btn-cancel").addEventListener("click", ()=> $("#modal").close());
 // Actions
 $("#btn-add").addEventListener("click", openNew);
 $("#btn-aplicar").addEventListener("click", render);
-$("#btn-reset").addEventListener("click", ()=>{ $("#q").value=""; $("#f-tipo").value=""; $("#f-ciclo").value=""; $("#f-epoca").value=""; $$(".filters input[type=checkbox]").forEach(c=>c.checked=false); render(); });
+$("#btn-reset").addEventListener("click", ()=>{ $("#q").value=""; $("#f-tipo").value=""; $("#f-ciclo").value=""; $("#f-epoca").value=""; $$("#filters input[type=checkbox]").forEach(c=>c.checked=false); render(); });
 
 $("#btn-theme").addEventListener("click", ()=>{
   document.documentElement.classList.toggle("light");
@@ -288,7 +273,7 @@ $("#btn-calendar").addEventListener("click", ()=>{
 });
 
 // Filters live
-["q","f-tipo","f-familia","f-ciclo","f-epoca","c-invernadero","c-exterior","c-pie","c-semilla-propia","c-organica"].forEach(id=>{
+["q","f-tipo","f-ciclo","f-epoca","c-invernadero","c-exterior","c-pie","c-semilla-propia","c-organica"].forEach(id=>{
   const el = $("#"+id);
   if(!el) return;
   el.addEventListener("input", render);
