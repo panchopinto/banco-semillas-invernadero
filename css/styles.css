@@ -293,3 +293,39 @@ dialog{ border:0; padding:0; background:transparent }
 }
 .modal .btn.grad-green{ box-shadow: var(--shadow) }
 .modal .btn.ghost{ background: var(--glass) }
+
+/* ==== Legibilidad tabla y tooltips ==== */
+.table-head{
+  background: linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.35));
+  border-bottom:1px solid var(--stroke);
+  position:sticky; top:74px; z-index:5;
+  font-weight:800; letter-spacing:.2px;
+}
+.table-head > div{color:var(--txt)}
+.row{min-height:46px; align-items:center}
+.row .cell{font-weight:600; color:var(--txt)}
+
+/* separadores suaves */
+.table-rows{scrollbar-color: var(--accent) transparent}
+.row + .row{border-top:1px dashed var(--stroke)}
+
+/* tooltips */
+.has-tip{position:relative}
+.has-tip[data-tip]::after{
+  content: attr(data-tip);
+  position:absolute; bottom:calc(100% + 10px); left:50%; transform:translateX(-50%);
+  background:rgba(0,0,0,.85); color:#fff; font-weight:700;
+  padding:8px 10px; border-radius:10px; white-space:nowrap; box-shadow:var(--shadow);
+  opacity:0; pointer-events:none; transition:opacity .15s ease-out;
+}
+.has-tip[data-tip]::before{
+  content:""; position:absolute; bottom:100%; left:50%; transform:translateX(-50%);
+  border:7px solid transparent; border-top-color:rgba(0,0,0,.85);
+  opacity:0; transition:opacity .15s ease-out;
+}
+.has-tip:hover::after, .has-tip:hover::before{opacity:1}
+
+/* tabs con íconos alineados */
+.topbar .tab{display:inline-flex; align-items:center; gap:10px}
+.topbar .tab svg{width:18px; height:18px; display:inline-block}
+.topbar .tab .label{font-weight:800}
