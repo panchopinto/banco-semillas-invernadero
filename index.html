@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <div class="actions">
+  <div class="actions tabs">
     <button class="btn grad-green" id="btn-add">
       <span class="icon">🌱</span> Añadir semilla
     </button>
@@ -45,6 +45,8 @@
 </header>
 
 <div class="a11y-toolbar" role="region" aria-label="Herramientas de accesibilidad">
+  <button class="btn" id="a11y-cvd" title="Modo daltónicos (paleta + patrones)">🧩 Daltónicos</button>
+  <button class="btn" id="a11y-reset" title="Restablecer estilos y preferencias">♻️ Reset estilos</button>
   <button class="btn" id="a11y-contrast" title="Activar/Desactivar alto contraste">🌓 Alto contraste</button>
   <button class="btn" id="a11y-font-plus" title="Aumentar tamaño de fuente">🔎 A+</button>
   <button class="btn" id="a11y-font-minus" title="Disminuir tamaño de fuente">🔎 A−</button>
@@ -147,55 +149,51 @@
     <h3 id="modal-title">Nueva semilla</h3>
     <input type="hidden" id="id"/>
     <div class="grid-form">
-      <label>Nombre común<input id="nombre" required placeholder="Ej: Lechuga Romana"/></label>
-      <label>Nombre científico<input id="cientifico" placeholder="Ej: Lactuca sativa"/></label>
-      <label>Familia<input id="familia" placeholder="Ej: Asteraceae"/></label>
-      <label>Tipo
-        <select id="tipo" required>
+      <label data-tip="Nombre con el que se conoce en el invernadero. Ej: Lechuga Romana.">Nombre común<input id="nombre" title="Nombre común de la semilla (ej: Lechuga Romana)" required/></label>
+      <label data-tip="Nombre botánico. Ej: Lactuca sativa.">Nombre científico<input id="cientifico" title="Nombre científico en latín (ej: Lactuca sativa)"/></label>
+      <label data-tip="Familia botánica. Ej: Asteraceae.">Familia<input id="familia" title="Familia botánica (ej: Asteraceae)"/></label>
+      <label data-tip="Clasificación general: hortaliza, frutal, nativa, etc.">Tipo<select id="tipo" title="Tipo de planta (hortaliza, frutal, hierba, etc.)" required>
           <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
           <option>Flor</option><option>Legumbre/Grano</option><option>Nativo</option>
         </select>
       </label>
-      <label>Ciclo
-        <select id="ciclo">
+      <label data-tip="Duración del cultivo (anual, bianual, perenne).">Ciclo<select id="ciclo" title="Duración del ciclo de vida de la planta">
           <option>Anual</option><option>Bianual</option><option>Perenne</option>
         </select>
       </label>
-      <label>Periodo de siembra (meses, ej: sep-oct, mar-abr)<input id="siembra" placeholder="Ej: sep-oct / mar-abr"/></label>
-      <label>Periodo de trasplante (opcional)<input id="trasplante" placeholder="Opcional"/></label>
-      <label>Días germinación (ej: 7-14)<input id="germinacion" placeholder="Ej: 7-14"/></label>
-      <label>Temp. germinación (°C)<input id="temp" placeholder="Ej: 18-22"/></label>
-      <label>Profundidad siembra (cm)<input id="prof" placeholder="Ej: 0.5-1.0"/></label>
-      <label>Distancia plantas (cm)<input id="dist" placeholder="Ej: 25-30"/></label>
-      <label>Luz
-        <select id="luz">
+      <label>Periodo de siembra (meses, ej: sep-oct, mar-abr)<input id="siembra" title="Meses recomendados para siembra"/></label>
+      <label>Periodo de trasplante (opcional)<input id="trasplante" title="Meses recomendados para trasplante (si aplica)"/></label>
+      <label>Días germinación (ej: 7-14)<input id="germinacion" title="Tiempo estimado de germinación en días"/></label>
+      <label data-tip="Temperatura ideal del sustrato para germinar (°C).">Temp. germinación (°C)<input id="temp" title="Temperatura óptima de germinación en °C"/></label>
+      <label data-tip="Profundidad de cobertura de la semilla (cm).">Profundidad siembra (cm)<input id="prof" title="Profundidad de siembra en cm"/></label>
+      <label data-tip="Separación entre plantas (cm).">Distancia plantas (cm)<input id="dist" title="Distancia recomendada entre plantas en cm"/></label>
+      <label data-tip="Exposición recomendada (sol, semisombra, sombra).">Luz<select id="luz" title="Tipo de luz necesaria para crecer">
           <option>Sol</option><option>Semisombra</option><option>Sombra</option>
         </select>
       </label>
-      <label>Riego
-        <select id="riego">
+      <label data-tip="Necesidad de riego (bajo, medio, alto).">Riego<select id="riego" title="Nivel de riego recomendado">
           <option>Bajo</option><option>Medio</option><option>Alto</option>
         </select>
       </label>
-      <label>Ubicación (estantería/caja)<input id="ubicacion" placeholder="Ej: Estante B - Caja 3"/></label>
-      <label>Stock (sobres)<input id="stock" type="number" min="0" value="1" placeholder="Sobres disponibles"/></label>
-      <label>Fecha recolección/lote<input id="lote" placeholder="Ej: 2025-09 / Lote-12"/></label>
-      <label>Vida útil estimada (años)<input id="vida" placeholder="Ej: 2"/></label>
-      <label>Responsable/Profesor<input id="responsable" placeholder="Ej: Prof. Francisco Pinto"/></label>
-      <label>Curso/Proyecto<input id="curso" placeholder="Ej: 3°A / Proyecto Hidroponía"/></label>
-      <label>Uso previsto (actividad)<input id="uso" placeholder="Ej: Siembra en mesón NFT / Práctica germinación"/></label>
-      <label>Compatibilidades/Asociaciones<input id="asocia" placeholder="zanahoria + cebolla…"/></label>
-      <label>Alelopatías/No combinar<input id="anti" placeholder="no con…"/></label>
-      <label>Plagas comunes<input id="plagas" placeholder="Ej: pulgones, minadores"/></label>
-      <label>Recomendaciones<textarea id="reco" rows="2"></textarea></label>
-      <label>Notas<textarea id="notas" rows="2"></textarea></label>
-      <label class="check"><input type="checkbox" id="pie"/> Adaptaciones PIE</label>
-      <label class="check"><input type="checkbox" id="organica"/> Semilla orgánica</label>
-      <label class="check"><input type="checkbox" id="propia"/> Semilla propia</label>
+      <label data-tip="Dónde guardar/ubicar las semillas.">Ubicación (estantería/caja)<input id="ubicacion" title="Ubicación física en el invernadero"/></label>
+      <label data-tip="Cantidad de sobres disponibles.">Stock (sobres)<input id="stock" title="Cantidad de sobres disponibles" type="number" min="0" value="1"/></label>
+      <label data-tip="Fecha o código de lote para trazabilidad.">Fecha recolección/lote<input id="lote" title="Código/lote de recolección"/></label>
+      <label data-tip="Años que conserva viabilidad en condiciones ideales.">Vida útil estimada (años)<input id="vida" title="Vida útil estimada de la semilla en años"/></label>
+      <label data-tip="Persona a cargo. Ej: Prof. Francisco Pinto.">Responsable/Profesor<input id="responsable" title="Responsable o profesor encargado"/></label>
+      <label data-tip="Curso o proyecto asignado. Ej: 3°A / Hidroponía.">Curso/Proyecto<input id="curso" title="Curso o proyecto asociado"/></label>
+      <label data-tip="Actividad o práctica donde se usará.">Uso previsto (actividad)<input id="uso" title="Uso previsto de la semilla"/></label>
+      <label data-tip="Cultivos que conviene asociar.">Compatibilidades/Asociaciones<input id="asocia" title="Plantas compatibles para asociación" placeholder="zanahoria + cebolla…"/></label>
+      <label data-tip="Cultivos que NO conviene mezclar.">Alelopatías/No combinar<input id="anti" title="Plantas a evitar por alelopatía" placeholder="no con…"/></label>
+      <label data-tip="Plagas frecuentes. Ej: pulgones.">Plagas comunes<input id="plagas" title="Plagas comunes que afectan a esta semilla"/></label>
+      <label data-tip="Tips de manejo o cuidados.">Recomendaciones<textarea id="reco" title="Recomendaciones adicionales" rows="2"></textarea></label>
+      <label data-tip="Observaciones generales.">Notas<textarea id="notas" title="Notas extra" rows="2"></textarea></label>
+      <label class="check"><input type="checkbox" id="pie" title="Indica si tiene adaptaciones PIE"/> Adaptaciones PIE</label>
+      <label class="check"><input type="checkbox" id="organica" title="Semilla producida con prácticas orgánicas"/> Semilla orgánica</label>
+      <label class="check"><input type="checkbox" id="propia" title="Semilla guardada de producción propia"/> Semilla propia</label>
     </div>
     <menu class="modal-actions">
-      <button type="reset" class="btn ghost" id="btn-cancel"><span class="i">✖️</span> Cancelar</button>
-      <button type="submit" class="btn grad-green" id="btn-save"><span class="i">💾</span> Guardar</button>
+      <button type="reset" class="btn ghost" id="btn-cancel">Cancelar</button>
+      <button type="submit" class="btn grad-green" id="btn-save">Guardar</button>
     </menu>
   </form>
 </dialog>

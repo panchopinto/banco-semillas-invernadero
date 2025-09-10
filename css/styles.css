@@ -212,3 +212,139 @@ body.theme-light .table-header, body.theme-light .table-rows .row{ background:#f
 /* Bigger primary action button in modal */
 #btn-save{ font-size:15px; padding:10px 14px; border-radius:12px; }
 #btn-cancel{ font-weight:600; }
+
+
+/* === Dashboard tabs with icons === */
+.actions.tabs{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.actions.tabs .btn{
+  display:flex; align-items:center; gap:6px;
+  border-radius:14px;
+  padding:10px 14px;
+  font-weight:600;
+  box-shadow:0 4px 10px rgba(0,0,0,.15);
+  transition: transform .15s, box-shadow .2s;
+}
+.actions.tabs .btn:hover{ transform: translateY(-2px); box-shadow:0 6px 14px rgba(0,0,0,.2); }
+
+/* Daltonic-friendly palette (Color Universal Design) */
+body.is-daltonic{
+  --green:#009e73; --blue:#0072b2; --orange:#e69f00; --purple:#cc79a7; --pink:#f0e442;
+}
+body.is-daltonic .grad-green{ background: linear-gradient(135deg, #009e73, #56b4e9); }
+body.is-daltonic .grad-blue{ background: linear-gradient(135deg, #0072b2, #56b4e9); }
+body.is-daltonic .grad-orange{ background: linear-gradient(135deg, #e69f00, #f0e442); }
+body.is-daltonic .grad-purple{ background: linear-gradient(135deg, #cc79a7, #f0e442); }
+body.is-daltonic .grad-pink{ background: linear-gradient(135deg, #f0e442, #e69f00); }
+
+
+/* === Tabs estilo portafolio + Tooltips === */
+.actions{
+  display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-top:8px;
+}
+.actions .btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  padding:10px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.15);
+  box-shadow: 0 6px 18px rgba(0,0,0,.18);
+  transform: translateZ(0);
+  transition: transform .12s ease, box-shadow .2s ease, filter .15s ease;
+}
+.actions .btn .icon{ font-size:1.1em; }
+.actions .btn:hover{ transform: translateY(-1px); box-shadow:0 10px 22px rgba(0,0,0,.25); }
+.actions .btn:active{ transform: translateY(0); }
+
+/* Tooltips accesibles (con data-tip) */
+label[data-tip], .btn[data-tip]{
+  position:relative;
+}
+label[data-tip]:hover::after, .btn[data-tip]:hover::after{
+  content: attr(data-tip);
+  position:absolute;
+  z-index:40;
+  left:0; top:100%;
+  margin-top:6px;
+  max-width: 320px;
+  background: rgba(0,0,0,.85);
+  color: #fff;
+  font-size: .85em;
+  line-height:1.3;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid rgba(255,255,255,.2);
+  pointer-events:none;
+  white-space:normal;
+  box-shadow:0 6px 18px rgba(0,0,0,.35);
+}
+label[data-tip]:hover::before, .btn[data-tip]:hover::before{
+  content:"";
+  position:absolute; left:12px; top:calc(100% + 1px);
+  width:10px; height:10px;
+  background: rgba(0,0,0,.85);
+  transform:rotate(45deg);
+  border-left:1px solid rgba(255,255,255,.2);
+  border-top:1px solid rgba(255,255,255,.2);
+}
+
+/* Modo daltónicos: agrega patrones y garantiza diferencias más allá del color */
+body.is-cvd .grad-green,
+body.is-cvd .grad-blue,
+body.is-cvd .grad-orange,
+body.is-cvd .grad-purple,
+body.is-cvd .grad-pink,
+body.is-cvd .grad-teal{
+  background-image:
+    repeating-linear-gradient(45deg, rgba(255,255,255,.28) 0 6px, transparent 6px 12px),
+    linear-gradient(135deg, #6b7280, #374151) !important; /* gris alto contraste */
+  color:#fff !important;
+  outline: 2px dashed #fff;
+  text-decoration: underline;
+}
+
+body.is-cvd .btn .icon{ filter: drop-shadow(0 1px 0 rgba(0,0,0,.4)); }
+body.is-cvd a{text-decoration: underline; text-underline-offset: 2px;}
+
+
+
+/* === Tooltips móviles con botón de ayuda === */
+label[data-tip]{
+  padding-right: 28px; /* espacio para el botón ayuda */
+}
+label[data-tip] .help-btn{
+  position:absolute;
+  right:6px; top:6px;
+  width:22px; height:22px;
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px;
+  border:1px solid rgba(0,0,0,.15);
+  background: #ffffff;
+  color:#111827;
+  font-size:12px; font-weight:800;
+  cursor:pointer;
+  box-shadow: 0 2px 8px rgba(0,0,0,.12);
+}
+label[data-tip] .help-btn:focus{ outline:3px solid var(--a11y-focus); outline-offset: 1px; }
+
+/* Mostrar tooltip cuando el usuario pulsa el botón (sin hover) */
+label[data-tip][data-tip-open="1"]::after,
+label[data-tip][data-tip-open="1"]::before{
+  opacity:1; visibility:visible;
+}
+
+label[data-tip]::after,
+label[data-tip]::before{
+  opacity:0; visibility:hidden;
+  transition: opacity .15s ease;
+}
+
+@media (hover: none){
+  /* Desactiva hover por defecto en dispositivos táctiles para evitar conflictos */
+  label[data-tip]:hover::after,
+  .btn[data-tip]:hover::after,
+  label[data-tip]:hover::before,
+  .btn[data-tip]:hover::before{
+    opacity:0; visibility:hidden;
+  }
+}
