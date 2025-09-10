@@ -39,10 +39,10 @@ hr{border:0;border-top:1px solid var(--line);margin:1rem 0}
 .grid{display:grid;grid-template-columns:360px 1fr;gap:12px;margin:12px}
 .side{position:sticky;top:74px;height:calc(100vh - 120px);overflow:auto}
 .table{overflow:hidden}
-.table-head,.row{display:grid;grid-template-columns:1.1fr 1fr .8fr .8fr .6fr .9fr .6fr .7fr .6fr .9fr .8fr;gap:8px;align-items:center}
-.table-head{padding:10px;background:#0e1419;border-bottom:1px solid var(--line);position:sticky;top:74px;z-index:1}
-.table-rows{max-height:calc(100vh - 260px);overflow:auto}
-.row{padding:10px;border-bottom:1px dashed var(--line)}
+.table-head,.row{display:grid;grid-template-columns:1.1fr 1fr .9fr .7fr .7fr .7fr .6fr .7fr .6fr .9fr .8fr .8fr;gap:10px;align-items:center}
+.table-head{padding:12px;background:#0f1419;border-bottom:1px solid var(--line)}
+.table-rows{max-height:calc(100vh - 280px);overflow:auto}
+.row{padding:12px;border-bottom:1px dashed var(--line)}
 .cell{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .icon-btn{border:0;background:#0e1419;color:#fff;border-radius:10px;padding:6px 8px;cursor:pointer;border:1px solid var(--line)}
 .icon-btn:hover{border-color:#2ecc71}
@@ -66,3 +66,24 @@ dialog{border:0;padding:0;background:transparent}
   .table-head,.row{grid-template-columns:repeat(3,1fr);grid-auto-flow:row}
   .side{position:static;height:auto}
 }
+
+/* Mejoras visuales */
+.row:nth-child(odd){background:rgba(255,255,255,.02)}
+.row:hover{background:rgba(46,204,113,.08)}
+.cell .flag{margin-left:.4rem}
+.flag.ok{background:#0e1b12;color:#8de7b1;border:1px solid #174d2e;border-radius:999px;padding:2px 6px;font-size:.75rem}
+.flag.warn{background:#1b120e;color:#f0b38a;border:1px solid #5a3116;border-radius:999px;padding:2px 6px;font-size:.75rem}
+.row.inseason{box-shadow:inset 0 0 0 1px rgba(46,204,113,.3)}
+
+.btn{padding:10px 14px;font-size:14px}
+.btn .icon{font-size:1.2rem}
+.actions .btn{border:1px solid rgba(255,255,255,.08)}
+.actions .btn:active{transform:translateY(0) scale(.98)}
+
+/* Selected chips */
+.chip input:checked + span,
+.chip:has(input:checked){background:#133023;border-color:#1f6a44;color:#9ae6b4}
+
+/* Light theme support quick */
+:root.light{--bg:#f7fafc;--fg:#0b1320;--muted:#506273;--card:#ffffff;--line:#d7e2ea}
+:root.light .row:nth-child(odd){background:rgba(0,0,0,.03)}
