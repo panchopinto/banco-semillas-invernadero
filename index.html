@@ -22,19 +22,19 @@
   </div>
 
   <div class="actions tabs">
-    <button class="btn grad-green" id="btn-add">
+    <button class="btn grad-green" id="btn-add" data-tip="Crear un nuevo registro de semilla con todos los campos clave." data-tip="Abrir formulario para registrar una nueva semilla en el banco.">
       <span class="icon">🌱</span> Añadir semilla
     </button>
-    <button class="btn grad-blue" id="btn-import">
+    <button class="btn grad-blue" id="btn-import" data-tip="Cargar semillas desde un archivo CSV. Útil para importar en lote." data-tip="Importar semillas desde un archivo CSV existente.">
       <span class="icon">📥</span> Importar CSV
     </button>
-    <button class="btn grad-orange" id="btn-export">
+    <button class="btn grad-orange" id="btn-export" data-tip="Descargar la base de semillas actual como CSV para respaldo o edición." data-tip="Exportar semillas registradas a un archivo CSV descargable.">
       <span class="icon">📤</span> Exportar CSV
     </button>
-    <button class="btn grad-purple" id="btn-calendar">
+    <button class="btn grad-purple" id="btn-calendar" data-tip="Ver calendario de siembras y periodos recomendados." data-tip="Visualizar calendario de siembras programadas.">
       <span class="icon">📅</span> Calendario de siembras
     </button>
-    <button class="btn grad-teal" id="btn-reset">
+    <button class="btn grad-teal" id="btn-reset" data-tip="Limpiar filtros y volver a ver todas las semillas." data-tip="Limpiar filtros y restablecer la vista de la tabla.">
       <span class="icon">🧹</span> Limpiar filtro
     </button>
     <button class="btn grad-pink" id="btn-theme">
@@ -135,6 +135,42 @@
       <div id="rows" class="table-rows"></div>
     </section>
   </section>
+
+<section class="card" id="asignaciones">
+  <h2>Asignaciones</h2>
+  <div class="filters">
+    <input id="flt-prof" placeholder="Filtrar por profesor/responsable"/>
+    <input id="flt-curso" placeholder="Filtrar por curso/proyecto"/>
+    <input id="flt-uso" placeholder="Filtrar por uso/actividad"/>
+    <button class="btn grad-blue" id="btn-exp-asig" data-tip="Exportar asignaciones a CSV">📤 Exportar CSV</button>
+  </div>
+  <div class="table">
+    <div class="table-header">
+      <div>Fecha</div><div>Semilla</div><div>Responsable</div><div>Curso/Proyecto</div><div>Uso</div><div>Cant.</div><div>Acciones</div>
+    </div>
+    <div id="asig-rows" class="table-rows"></div>
+  </div>
+</section>
+
+<section class="card" id="etiquetas">
+  <h2>Etiquetas con QR</h2>
+  <div class="filters">
+    <button class="btn grad-green" id="btn-etq-seleccion" data-tip="Imprimir etiquetas de las semillas seleccionadas">🖨️ Imprimir etiquetas (selección)</button>
+    <button class="btn grad-orange" id="btn-etq-todas" data-tip="Imprimir etiquetas de todas las semillas">🖨️ Imprimir todas</button>
+  </div>
+  <div id="etq-preview" class="labels-preview"></div>
+  <small>Nota: por ahora el QR se genera con un servicio público (api.qrserver.com). Podemos cambiar a generador local sin internet cuando lo requieras.</small>
+</section>
+
+<section class="card" id="calendario">
+  <h2>Calendario de siembras</h2>
+  <div class="filters">
+    <input id="cal-buscar" placeholder="Buscar por nombre (ej: tomate, lechuga)"/>
+    <button class="btn grad-purple" id="btn-cal-ics" data-tip="Exportar recordatorios de siembra a archivo .ics (calendario)">📅 Exportar .ics</button>
+  </div>
+  <div id="cal-grid" class="cal-grid"></div>
+</section>
+
 </main>
 
 <footer>

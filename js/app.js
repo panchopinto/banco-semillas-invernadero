@@ -457,3 +457,330 @@ $("#btn-calendar").addEventListener("click", ()=>{
     });
   }, { capture: true });
 })();
+
+
+// === Tooltips móviles también para botones ===
+(function(){
+  const buttons = document.querySelectorAll('.actions .btn[data-tip]');
+  buttons.forEach((btn)=>{
+    if(btn.querySelector('.help-btn')) return;
+    btn.style.position = btn.style.position || 'relative';
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'help-btn';
+    b.setAttribute('aria-label','Ayuda: ' + (btn.textContent || '').trim());
+    b.setAttribute('aria-expanded','false');
+    b.textContent = '?';
+    b.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const open = btn.getAttribute('data-tip-open') === '1';
+      document.querySelectorAll('.actions .btn[data-tip][data-tip-open="1"]').forEach(el=>{
+        el.setAttribute('data-tip-open','0');
+        const hb = el.querySelector('.help-btn');
+        hb && hb.setAttribute('aria-expanded','false');
+      });
+      btn.setAttribute('data-tip-open', open ? '0' : '1');
+      b.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+    b.addEventListener('blur', ()=>{
+      setTimeout(()=>{
+        if(!btn.contains(document.activeElement)){
+          btn.setAttribute('data-tip-open','0');
+          b.setAttribute('aria-expanded','false');
+        }
+      }, 50);
+    });
+    btn.appendChild(b);
+  });
+  document.addEventListener('click', ()=>{
+    document.querySelectorAll('.actions .btn[data-tip][data-tip-open="1"]').forEach(el=>{
+      el.setAttribute('data-tip-open','0');
+      const hb = el.querySelector('.help-btn');
+      hb && hb.setAttribute('aria-expanded','false');
+    });
+  }, { capture: true });
+})();
+
+
+// === Tooltips móviles para botones del dashboard ===
+(function(){
+  const act = document.querySelector('.actions');
+  if(!act) return;
+  const isTouch = matchMedia('(hover: none)').matches;
+  const buttons = act.querySelectorAll('.btn[data-tip]');
+  buttons.forEach(btn=>{
+    // Wrap
+    if(btn.parentElement && btn.parentElement.classList.contains('btn-wrap')) return;
+    const wrap = document.createElement('span');
+    wrap.className = 'btn-wrap';
+    btn.parentElement.insertBefore(wrap, btn);
+    wrap.appendChild(btn);
+    // Mini help button
+    const hb = document.createElement('button');
+    hb.type = 'button';
+    hb.className = 'help-btn-mini';
+    hb.setAttribute('aria-label','Ayuda: ' + (btn.textContent||'').trim());
+    hb.setAttribute('aria-expanded','false');
+    hb.textContent = '?';
+    wrap.appendChild(hb);
+    hb.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const open = btn.getAttribute('data-tip-open') === '1';
+      // close others
+      act.querySelectorAll('.btn[data-tip][data-tip-open="1"]').forEach(b=>{
+        b.setAttribute('data-tip-open','0');
+      });
+      btn.setAttribute('data-tip-open', open ? '0' : '1');
+      hb.setAttribute('aria-expanded', open ? 'false' : 'true');
+    });
+  });
+  // Close on outside click
+  document.addEventListener('click', ()=>{
+    act.querySelectorAll('.btn[data-tip][data-tip-open="1"]').forEach(b=> b.setAttribute('data-tip-open','0'));
+  }, { capture:true });
+})();
+
+
+// === Gestión de Asignaciones, Etiquetas, Calendario y Viabilidad ===
+(function(){
+  const $ = (q)=>document.querySelector(q);
+  const $$ = (q)=>document.querySelectorAll(q);
+
+  // Fuente de verdad: las filas (semillas) están en memoria en app.js (supone que ya existen funciones de carga)
+  // Usaremos window._seeds como almacén simple si no existe
+  window._seeds = window._seeds || [];
+
+  // Viabilidad: estima % en base a 'vida' (años) y 'lote' (AAAA-MM o AAAA-MM-DD)
+  function viability(seed){
+    const vida = parseFloat(seed.vida||"0")||0;
+    if(!vida) return {pct: 100, cls:'ok', hint:'sin vida útil definida'};
+    const lote = (seed.lote||'').trim();
+    let since = null;
+    const m = lote.match(/(\d{4})([-/](\d{2}))?([-/](\d{2}))?/);
+    if(m){
+      const y = +m[1], mo = m[3]? (+m[3]-1):0, d = m[5]? +m[5]:1;
+      since = new Date(y, mo, d);
+    }
+    if(!since) return {pct: 100, cls:'ok', hint:'sin fecha válida'};
+    const now = new Date();
+    const years = (now - since)/(365.25*24*3600*1000);
+    let pct = Math.max(5, Math.round(100 * Math.max(0, (vida - years)) / Math.max(vida, 0.01)));
+    let cls = pct>=70?'ok': pct>=40?'mid':'low';
+    return {pct, cls, hint:`${pct}% estimado`};
+  }
+
+  // Render viabilidad en la tabla principal si existe #rows
+  const rowsEl = $('#rows');
+  if(rowsEl){
+    const observer = new MutationObserver(()=>{
+      rowsEl.querySelectorAll('.row').forEach(r=>{
+        if(r.dataset.viabBound) return;
+        const id = r.getAttribute('data-id');
+        const seed = window._seeds.find(s=>String(s.id)===String(id));
+        if(!seed) return;
+        const badge = document.createElement('span');
+        const v = viability(seed);
+        badge.className = `badge ${v.cls}`;
+        badge.title = 'Viabilidad estimada según vida útil y fecha de lote';
+        badge.textContent = `Viabilidad ${v.pct}%`;
+        // Insert after nombre (assume name in column index 1)
+        const nameCell = r.children[1];
+        nameCell && nameCell.appendChild(document.createTextNode(' '));
+        nameCell && nameCell.appendChild(badge);
+        r.dataset.viabBound = '1';
+      });
+    });
+    observer.observe(rowsEl, {childList:true});
+  }
+
+  // === Asignaciones ===
+  const asig = JSON.parse(localStorage.getItem('asignaciones')||'[]');
+  function saveAsign(){ localStorage.setItem('asignaciones', JSON.stringify(asig)); }
+  function addAsignacion(seed, cantidad){
+    const item = {
+      fecha: new Date().toISOString().slice(0,10),
+      nombre: seed.nombre||'',
+      responsable: seed.responsable||'',
+      curso: seed.curso||'',
+      uso: seed.uso||'',
+      cantidad: cantidad||1
+    };
+    asig.push(item); saveAsign();
+    renderAsignaciones();
+  }
+  function renderAsignaciones(){
+    const rows = $('#asig-rows'); if(!rows) return;
+    rows.innerHTML='';
+    const fprof = ($('#flt-prof')?.value||'').toLowerCase();
+    const fcurso = ($('#flt-curso')?.value||'').toLowerCase();
+    const fuso = ($('#flt-uso')?.value||'').toLowerCase();
+    asig.filter(a=>
+      (!fprof || a.responsable.toLowerCase().includes(fprof)) &&
+      (!fcurso || a.curso.toLowerCase().includes(fcurso)) &&
+      (!fuso || a.uso.toLowerCase().includes(fuso))
+    ).forEach(a=>{
+      const row = document.createElement('div'); row.className='row';
+      row.innerHTML = `<div>${a.fecha}</div>
+        <div>${a.nombre}</div>
+        <div>${a.responsable||'-'}</div>
+        <div>${a.curso||'-'}</div>
+        <div>${a.uso||'-'}</div>
+        <div class="qty">${a.cantidad||1}</div>
+        <div><button class="btn grad-orange btn-sm" data-action="undo">↩️ Deshacer</button></div>`;
+      row.querySelector('[data-action="undo"]').addEventListener('click', ()=>{
+        const idx = asig.indexOf(a);
+        if(idx>-1){ asig.splice(idx,1); saveAsign(); renderAsignaciones(); }
+      });
+      rows.appendChild(row);
+    });
+  }
+  $('#flt-prof')?.addEventListener('input', renderAsignaciones);
+  $('#flt-curso')?.addEventListener('input', renderAsignaciones);
+  $('#flt-uso')?.addEventListener('input', renderAsignaciones);
+  $('#btn-exp-asig')?.addEventListener('click', ()=>{
+    const headers = ['fecha','nombre','responsable','curso','uso','cantidad'];
+    const csv = [headers.join(',')].concat(asig.map(a=>headers.map(h=>`"${String(a[h]||'').replace(/"/g,'""')}"`).join(','))).join('\n');
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `asignaciones_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+  });
+  renderAsignaciones();
+
+  // Hook: botón en la tabla principal para "Entregar/Reservar" si existe
+  // Agrega un mini botón en cada fila con id data-id
+  if(rowsEl){
+    const obs2 = new MutationObserver(()=>{
+      rowsEl.querySelectorAll('.row').forEach(r=>{
+        if(r.dataset.asigBound) return;
+        const id = r.getAttribute('data-id');
+        const seed = window._seeds.find(s=>String(s.id)===String(id));
+        if(!seed) return;
+        const cellActions = r.lastElementChild;
+        if(cellActions){
+          const btn = document.createElement('button');
+          btn.className = 'btn grad-blue btn-sm';
+          btn.textContent = '🎒 Entregar';
+          btn.title = 'Registrar entrega / reserva para una actividad';
+          btn.addEventListener('click', ()=>{
+            const cant = Math.max(1, parseInt(prompt('Cantidad a entregar:', '1')||'1',10));
+            addAsignacion(seed, cant);
+            // Update stock if number
+            const st = parseInt(seed.stock||'0',10);
+            if(!isNaN(st)){ seed.stock = Math.max(0, st - cant); }
+          });
+          cellActions.appendChild(btn);
+        }
+        r.dataset.asigBound='1';
+      });
+    });
+    obs2.observe(rowsEl, {childList:true});
+  }
+
+  // === Etiquetas con QR ===
+  function makeQRUrl(text, size){ // usa servicio público por ahora
+    const u = 'https://api.qrserver.com/v1/create-qr-code/?size='+encodeURIComponent(size+'x'+size)+'&data='+encodeURIComponent(text);
+    return u;
+  }
+  function renderEtiquetas(seeds){
+    const cont = $('#etq-preview'); if(!cont) return;
+    cont.innerHTML='';
+    seeds.forEach(s=>{
+      const wrap = document.createElement('div'); wrap.className='label-card';
+      const info = document.createElement('div');
+      const sci = s.cientifico? `<small><em>${s.cientifico}</em></small>`:'';
+      const ubic = s.ubicacion? `<small>Ubicación: ${s.ubicacion}</small>`:'';
+      info.innerHTML = `<div class="name">${s.nombre||'(sin nombre)'}</div>${sci}${ubic}`;
+      const qr = document.createElement('div'); qr.className='qr';
+      const img = document.createElement('img');
+      const payload = `seed:${s.id||''}|${s.nombre||''}|${s.cientifico||''}`;
+      img.src = makeQRUrl(payload, 120);
+      img.alt = 'QR '+(s.nombre||'');
+      qr.appendChild(img);
+      wrap.appendChild(info); wrap.appendChild(qr);
+      cont.appendChild(wrap);
+    });
+    window.print(); // abre diálogo de impresión directo
+  }
+  $('#btn-etq-seleccion')?.addEventListener('click', ()=>{
+    const selected = (window._seeds||[]).filter(s=>s._selected);
+    if(selected.length===0){ alert('No hay semillas seleccionadas. Selecciona alguna en la tabla.'); return; }
+    renderEtiquetas(selected);
+  });
+  $('#btn-etq-todas')?.addEventListener('click', ()=> renderEtiquetas(window._seeds||[]) );
+
+  // === Calendario de siembras ===
+  const meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  function parseMeses(str){
+    // soporta "sep-oct, mar-abr" etc.
+    const map = {ene:0,feb:1,mar:2,abr:3,may:4,jun:5,jul:6,ago:7,sep:8,oct:9,nov:10,dic:11};
+    const arr = new Array(12).fill(false);
+    (str||'').split(',').map(s=>s.trim()).forEach(tok=>{
+      if(!tok) return;
+      const m = tok.toLowerCase().match(/([a-záéíóú]{3})\s*-\s*([a-záéíóú]{3})/);
+      if(m){
+        let a = map[m[1].normalize('NFD').replace(/[\u0300-\u036f]/g,'')]; 
+        let b = map[m[2].normalize('NFD').replace(/[\u0300-\u036f]/g,'')];
+        if(a!=null && b!=null){
+          let i=a; while(true){
+            arr[i]=true; if(i==b) break; i=(i+1)%12;
+            if(i==a) break;
+          }
+        }
+      }else{
+        const k = map[tok.normalize('NFD').replace(/[\u0300-\u036f]/g,'')];
+        if(k!=null) arr[k]=true;
+      }
+    });
+    return arr;
+  }
+  function renderCalendario(){
+    const grid = $('#cal-grid'); if(!grid) return;
+    grid.innerHTML='';
+    const q = ($('#cal-buscar')?.value||'').toLowerCase();
+    const seeds = (window._seeds||[]).filter(s=>!q || (s.nombre||'').toLowerCase().includes(q));
+    // encabezado
+    const hdr = document.createElement('div'); hdr.className='row';
+    for(let i=0;i<12;i++){ const m=document.createElement('div'); m.className='month'; m.textContent=meses[i]; grid.appendChild(m); }
+    seeds.forEach(s=>{
+      const arr = parseMeses(s.siembra||'');
+      arr.forEach((on, i)=>{
+        const d = document.createElement('div');
+        d.className = 'chip ' + (on?'chip-on':'chip-off');
+        d.textContent = (s.nombre||''); if(!on) d.textContent='';
+        d.title = (s.nombre||'') + (on?': recomendado':''); 
+        grid.appendChild(d);
+      });
+    });
+  }
+  $('#cal-buscar')?.addEventListener('input', renderCalendario);
+  $('#btn-cal-ics')?.addEventListener('click', ()=>{
+    // Por ahora, un evento por mes "on" con recordatorio 7 días antes
+    let ics = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//BancoSemillas//ES\n";
+    (window._seeds||[]).forEach(s=>{
+      const arr = parseMeses(s.siembra||'');
+      arr.forEach((on, i)=>{
+        if(!on) return;
+        const year = new Date().getFullYear();
+        const dt = `${year}${String(i+1).padStart(2,'0')}01`;
+        ics += "BEGIN:VEVENT\n";
+        ics += "UID:" + (s.id||Math.random()).toString().replace(/\W/g,'')+"-"+i+"@bsem\n";
+        ics += "DTSTART;VALUE=DATE:"+dt+"\n";
+        ics += "SUMMARY:Siembra — "+(s.nombre||'')+"\n";
+        ics += "DESCRIPTION:"+ (s.reco||'')+"\n";
+        ics += "BEGIN:VALARM\nTRIGGER:-P7D\nACTION:DISPLAY\nDESCRIPTION:Recordatorio siembra "+(s.nombre||'')+"\nEND:VALARM\n";
+        ics += "END:VEVENT\n";
+      });
+    });
+    ics += "END:VCALENDAR";
+    const blob = new Blob([ics], {type:'text/calendar;charset=utf-8;'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = "siembras.ics";
+    a.click();
+  });
+
+  // Inicializa render de calendario al cargar
+  document.addEventListener('DOMContentLoaded', renderCalendario);
+})();
