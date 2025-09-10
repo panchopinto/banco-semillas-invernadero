@@ -87,3 +87,128 @@ dialog{border:0;padding:0;background:transparent}
 /* Light theme support quick */
 :root.light{--bg:#f7fafc;--fg:#0b1320;--muted:#506273;--card:#ffffff;--line:#d7e2ea}
 :root.light .row:nth-child(odd){background:rgba(0,0,0,.03)}
+
+
+/* === A11Y & Modal Enhancements === */
+:root{
+  --a11y-focus:#ffd54f;
+  --card-light:#ffffff;
+  --fg-dark:#0b0f12;
+}
+
+dialog#modal::backdrop{
+  background: rgba(0,0,0,.55);
+  backdrop-filter: blur(2px);
+}
+
+.modal.card{
+  background: var(--card-light) !important;
+  color: var(--fg-dark) !important;
+  border-color: #e6e9ee !important;
+  box-shadow: 0 18px 48px rgba(0,0,0,.35);
+  max-width: 980px;
+  width: min(92vw, 980px);
+}
+
+.grid-form{
+  display:grid;
+  grid-template-columns: repeat(2, minmax(180px,1fr));
+  gap:12px 16px;
+  margin-top:10px;
+}
+
+@media (max-width:720px){
+  .grid-form{ grid-template-columns: 1fr; }
+}
+
+.grid-form label{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-weight:600;
+}
+
+.grid-form input,
+.grid-form select,
+.grid-form textarea{
+  padding:10px 12px;
+  border:1.5px solid #d4dbe3;
+  border-radius:10px;
+  background:#f8fbff;
+  color:#0b0f12;
+  outline:none;
+  transition: border-color .2s, box-shadow .2s, background .2s;
+}
+
+.grid-form input::placeholder,
+.grid-form textarea::placeholder{ color:#6c7a89; }
+
+.grid-form input:focus,
+.grid-form select:focus,
+.grid-form textarea:focus{
+  border-color:#7db8ff;
+  box-shadow: 0 0 0 3px rgba(125,184,255,.25);
+  background:#ffffff;
+}
+
+.grid-form .check{ flex-direction:row; align-items:center; gap:10px; font-weight:500; }
+
+.modal-actions{
+  display:flex; justify-content:flex-end; gap:10px; margin-top:14px;
+}
+
+.btn .i{ display:inline-flex; width:1.1em; height:1.1em; margin-right:.45rem; vertical-align:-.2em; }
+
+/* Multicolor gradient helpers for buttons (matches your portfolio style) */
+.grad-green{ background: linear-gradient(135deg, #22c55e, #16a34a); color:white; }
+.grad-blue{ background: linear-gradient(135deg, #3b82f6, #1d4ed8); color:white; }
+.grad-orange{ background: linear-gradient(135deg, #f59e0b, #d97706); color:white; }
+.grad-purple{ background: linear-gradient(135deg, #a855f7, #7e22ce); color:white; }
+.grad-pink{ background: linear-gradient(135deg, #ec4899, #db2777); color:white; }
+
+/* Accessibility toolbar */
+.a11y-toolbar{
+  position: sticky; top: 0; z-index: 50;
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+  background: linear-gradient(90deg, rgba(22,163,74,.15), rgba(16,185,129,.10), rgba(20,184,166,.12));
+  border-bottom: 1px dashed rgba(255,255,255,.15);
+  padding:10px 12px;
+}
+
+.a11y-toolbar .btn{
+  padding:8px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.15);
+  background: rgba(255,255,255,.06);
+  color: var(--fg);
+  font-weight:600;
+}
+.a11y-toolbar .btn:focus{ outline:3px solid var(--a11y-focus); outline-offset:2px; }
+
+/* High-contrast / readable modes */
+body.is-contrast{
+  --bg:#000; --fg:#fff; --card:#0f0f0f; --line:#222;
+}
+body.is-readable{
+  font-size:17px;
+  line-height:1.6;
+  letter-spacing:.2px;
+}
+
+/* Green garden theme */
+body.theme-garden{
+  background: radial-gradient(1200px 600px at 20% -10%, #0c3b2e 0%, transparent 60%),
+              radial-gradient(1000px 500px at 120% 10%, #064e3b 0%, transparent 60%),
+              linear-gradient(180deg, #071a14 0%, #0b0f12 60%);
+}
+
+/* Light theme (optional) */
+body.theme-light{
+  --bg:#f7fafc; --fg:#0b0f12; --card:#ffffff; --line:#e3e8ef;
+  color: var(--fg);
+}
+body.theme-light .topbar{ border-bottom-color:#e3e8ef; }
+body.theme-light .card{ border-color:#e3e8ef; box-shadow:0 6px 18px rgba(0,0,0,.06); }
+body.theme-light .table-header, body.theme-light .table-rows .row{ background:#ffffff; }
+
+/* Bigger primary action button in modal */
+#btn-save{ font-size:15px; padding:10px 14px; border-radius:12px; }
+#btn-cancel{ font-weight:600; }

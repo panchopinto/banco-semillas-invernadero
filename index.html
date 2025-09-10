@@ -44,6 +44,17 @@
   </div>
 </header>
 
+<div class="a11y-toolbar" role="region" aria-label="Herramientas de accesibilidad">
+  <button class="btn" id="a11y-contrast" title="Activar/Desactivar alto contraste">🌓 Alto contraste</button>
+  <button class="btn" id="a11y-font-plus" title="Aumentar tamaño de fuente">🔎 A+</button>
+  <button class="btn" id="a11y-font-minus" title="Disminuir tamaño de fuente">🔎 A−</button>
+  <button class="btn" id="a11y-readable" title="Modo lectura amigable">📖 Lectura</button>
+  <button class="btn" id="a11y-theme-garden" title="Fondo verde tipo invernadero">🌿 Fondo verde</button>
+  <button class="btn" id="a11y-theme-light" title="Tema claro">🌞 Tema claro</button>
+  <button class="btn" id="a11y-theme-dark" title="Tema oscuro">🌙 Tema oscuro</button>
+</div>
+
+
 <main>
   <section class="kpis">
     <div class="kpi card">
@@ -136,9 +147,9 @@
     <h3 id="modal-title">Nueva semilla</h3>
     <input type="hidden" id="id"/>
     <div class="grid-form">
-      <label>Nombre común<input id="nombre" required/></label>
-      <label>Nombre científico<input id="cientifico"/></label>
-      <label>Familia<input id="familia"/></label>
+      <label>Nombre común<input id="nombre" required placeholder="Ej: Lechuga Romana"/></label>
+      <label>Nombre científico<input id="cientifico" placeholder="Ej: Lactuca sativa"/></label>
+      <label>Familia<input id="familia" placeholder="Ej: Asteraceae"/></label>
       <label>Tipo
         <select id="tipo" required>
           <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
@@ -150,12 +161,12 @@
           <option>Anual</option><option>Bianual</option><option>Perenne</option>
         </select>
       </label>
-      <label>Periodo de siembra (meses, ej: sep-oct, mar-abr)<input id="siembra"/></label>
-      <label>Periodo de trasplante (opcional)<input id="trasplante"/></label>
-      <label>Días germinación (ej: 7-14)<input id="germinacion"/></label>
-      <label>Temp. germinación (°C)<input id="temp"/></label>
-      <label>Profundidad siembra (cm)<input id="prof"/></label>
-      <label>Distancia plantas (cm)<input id="dist"/></label>
+      <label>Periodo de siembra (meses, ej: sep-oct, mar-abr)<input id="siembra" placeholder="Ej: sep-oct / mar-abr"/></label>
+      <label>Periodo de trasplante (opcional)<input id="trasplante" placeholder="Opcional"/></label>
+      <label>Días germinación (ej: 7-14)<input id="germinacion" placeholder="Ej: 7-14"/></label>
+      <label>Temp. germinación (°C)<input id="temp" placeholder="Ej: 18-22"/></label>
+      <label>Profundidad siembra (cm)<input id="prof" placeholder="Ej: 0.5-1.0"/></label>
+      <label>Distancia plantas (cm)<input id="dist" placeholder="Ej: 25-30"/></label>
       <label>Luz
         <select id="luz">
           <option>Sol</option><option>Semisombra</option><option>Sombra</option>
@@ -166,16 +177,16 @@
           <option>Bajo</option><option>Medio</option><option>Alto</option>
         </select>
       </label>
-      <label>Ubicación (estantería/caja)<input id="ubicacion"/></label>
-      <label>Stock (sobres)<input id="stock" type="number" min="0" value="1"/></label>
-      <label>Fecha recolección/lote<input id="lote"/></label>
-      <label>Vida útil estimada (años)<input id="vida"/></label>
-      <label>Responsable/Profesor<input id="responsable"/></label>
-      <label>Curso/Proyecto<input id="curso"/></label>
-      <label>Uso previsto (actividad)<input id="uso"/></label>
+      <label>Ubicación (estantería/caja)<input id="ubicacion" placeholder="Ej: Estante B - Caja 3"/></label>
+      <label>Stock (sobres)<input id="stock" type="number" min="0" value="1" placeholder="Sobres disponibles"/></label>
+      <label>Fecha recolección/lote<input id="lote" placeholder="Ej: 2025-09 / Lote-12"/></label>
+      <label>Vida útil estimada (años)<input id="vida" placeholder="Ej: 2"/></label>
+      <label>Responsable/Profesor<input id="responsable" placeholder="Ej: Prof. Francisco Pinto"/></label>
+      <label>Curso/Proyecto<input id="curso" placeholder="Ej: 3°A / Proyecto Hidroponía"/></label>
+      <label>Uso previsto (actividad)<input id="uso" placeholder="Ej: Siembra en mesón NFT / Práctica germinación"/></label>
       <label>Compatibilidades/Asociaciones<input id="asocia" placeholder="zanahoria + cebolla…"/></label>
       <label>Alelopatías/No combinar<input id="anti" placeholder="no con…"/></label>
-      <label>Plagas comunes<input id="plagas"/></label>
+      <label>Plagas comunes<input id="plagas" placeholder="Ej: pulgones, minadores"/></label>
       <label>Recomendaciones<textarea id="reco" rows="2"></textarea></label>
       <label>Notas<textarea id="notas" rows="2"></textarea></label>
       <label class="check"><input type="checkbox" id="pie"/> Adaptaciones PIE</label>
@@ -183,8 +194,8 @@
       <label class="check"><input type="checkbox" id="propia"/> Semilla propia</label>
     </div>
     <menu class="modal-actions">
-      <button type="reset" class="btn ghost" id="btn-cancel">Cancelar</button>
-      <button type="submit" class="btn grad-green" id="btn-save">Guardar</button>
+      <button type="reset" class="btn ghost" id="btn-cancel"><span class="i">✖️</span> Cancelar</button>
+      <button type="submit" class="btn grad-green" id="btn-save"><span class="i">💾</span> Guardar</button>
     </menu>
   </form>
 </dialog>

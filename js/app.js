@@ -313,3 +313,63 @@ $("#btn-calendar").addEventListener("click", ()=>{
     document.body.appendChild(s);
   }
 })();
+
+
+// === Accesibilidad y temas ===
+(function(){
+  const $ = (q)=>document.querySelector(q);
+  const root = document.body;
+  const LS = (k,v)=>v===undefined?localStorage.getItem(k):localStorage.setItem(k,v);
+
+  // Apply saved prefs
+  try{
+    const prefs = JSON.parse(LS('a11y:prefs')||'{}');
+    if(prefs.contrast) root.classList.add('is-contrast');
+    if(prefs.readable) root.classList.add('is-readable');
+    if(prefs.theme) root.classList.add(prefs.theme);
+    if(prefs.fontSize) document.documentElement.style.fontSize = prefs.fontSize + 'px';
+  }catch(e){}
+
+  function save(){
+    const prefs = {
+      contrast: root.classList.contains('is-contrast'),
+      readable: root.classList.contains('is-readable'),
+      theme: (['theme-garden','theme-light','theme-dark'].find(t=>root.classList.contains(t)))||null,
+      fontSize: parseFloat(getComputedStyle(document.documentElement).fontSize)
+    };
+    localStorage.setItem('a11y:prefs', JSON.stringify(prefs));
+  }
+
+  const incFont = ()=>{
+    const cur = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const next = Math.min(cur+1, 22);
+    document.documentElement.style.fontSize = next+'px';
+    save();
+  };
+  const decFont = ()=>{
+    const cur = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const next = Math.max(cur-1, 13);
+    document.documentElement.style.fontSize = next+'px';
+    save();
+  };
+
+  $('#a11y-contrast')?.addEventListener('click', ()=>{ root.classList.toggle('is-contrast'); save(); });
+  $('#a11y-readable')?.addEventListener('click', ()=>{ root.classList.toggle('is-readable'); save(); });
+  $('#a11y-font-plus')?.addEventListener('click', incFont);
+  $('#a11y-font-minus')?.addEventListener('click', decFont);
+  $('#a11y-theme-garden')?.addEventListener('click', ()=>{
+    root.classList.remove('theme-light','theme-dark');
+    root.classList.toggle('theme-garden');
+    save();
+  });
+  $('#a11y-theme-light')?.addEventListener('click', ()=>{
+    root.classList.remove('theme-garden','theme-dark');
+    root.classList.add('theme-light');
+    save();
+  });
+  $('#a11y-theme-dark')?.addEventListener('click', ()=>{
+    root.classList.remove('theme-garden','theme-light');
+    root.classList.remove('theme-light'); // ensure dark = default (no class)
+    save();
+  });
+})();
