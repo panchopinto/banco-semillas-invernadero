@@ -22,22 +22,22 @@
   </div>
 
   <div class="actions">
-    <button class="btn grad-green" id="btn-add">
+    <button class="tab green" id="btn-add">
       <span class="icon">🌱</span> Añadir semilla
     </button>
-    <button class="btn grad-blue" id="btn-import">
+    <button class="tab primary" id="btn-import">
       <span class="icon">📥</span> Importar CSV
     </button>
-    <button class="btn grad-orange" id="btn-export">
+    <button class="tab orange" id="btn-export">
       <span class="icon">📤</span> Exportar CSV
     </button>
-    <button class="btn grad-purple" id="btn-calendar">
+    <button class="tab" id="btn-calendar">
       <span class="icon">📅</span> Calendario de siembras
     </button>
-    <button class="btn grad-teal" id="btn-reset">
+    <button class="tab pink" id="btn-reset">
       <span class="icon">🧹</span> Limpiar filtro
     </button>
-    <button class="btn grad-pink" id="btn-theme">
+    <button class="tab" id="btn-theme">
       <span class="icon">🌓</span> Tema
     </button>
     <input type="file" id="file-input" accept=".csv" hidden />
@@ -84,7 +84,7 @@
         <option value="siembra">En época de siembra</option>
         <option value="transplante">En época de trasplante</option>
       </select>
-      <button class="btn grad-teal" id="btn-aplicar">Aplicar</button>
+      <button class="tab primary" id="btn-aplicar"><span class="icon i-play"></span><span class="label">Aplicar</span></button>
     </div>
     <div class="row wrap">
       <label class="chip"><input type="checkbox" id="c-invernadero"/> Invernadero</label>
@@ -183,8 +183,8 @@
       <label class="check"><input type="checkbox" id="propia"/> Semilla propia</label>
     </div>
     <menu class="modal-actions">
-      <button type="reset" class="btn ghost" id="btn-cancel">Cancelar</button>
-      <button type="submit" class="btn grad-green" id="btn-save">Guardar</button>
+      <button type="reset" class="tab" id="btn-cancel">Cancelar</button>
+      <button type="submit" class="tab green" id="btn-save">Guardar</button>
     </menu>
   </form>
 </dialog>
