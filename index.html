@@ -16,7 +16,7 @@
       <circle cx="12" cy="7.2" r="1.6"></circle>
     </svg>
     <div>
-      <h1>Banco de Semillas</h1>
+      <h1>Banco de Semillas</h1><small class="subtitle">Invernadero — Liceo San Nicolás</small>
       <small id="today"></small>
     </div>
   </div>
@@ -72,6 +72,9 @@
         <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
         <option>Flor</option><option>Legumbre/Grano</option><option>Nativo</option>
       </select>
+      <select id="f-familia" class="select">
+        <option value="">Familia (todas)</option>
+      </select>
       <select id="f-ciclo" class="select">
         <option value="">Ciclo (todos)</option>
         <option>Anual</option><option>Bianual</option><option>Perenne</option>
@@ -105,6 +108,7 @@
       <div class="table-head">
         <div>Nombre común</div>
         <div>Nombre científico</div>
+        <div>Familia</div>
         <div>Tipo</div>
         <div>Siembra</div>
         <div>Germinación</div>
@@ -189,6 +193,7 @@
   <div class="row">
     <div class="cell nombre"></div>
     <div class="cell cientifico"></div>
+    <div class="cell familia"></div>
     <div class="cell tipo"></div>
     <div class="cell siembra"></div>
     <div class="cell germ"></div>
