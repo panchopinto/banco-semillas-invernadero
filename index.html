@@ -7,9 +7,9 @@
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <header class="topbar">
+  <header class="topbar" role="banner">
     <div class="brand">
-      <div class="logo"></div>
+      <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Banco de Semillas</h1>
         <p class="subtitle">Invernadero • Gestión y seguimiento</p>
@@ -17,44 +17,45 @@
     </div>
     <div class="actions-right">
       <input id="search" type="search" placeholder="Buscar semillas, especies, tags…" aria-label="Buscar" />
-      <button class="btn ghost" id="refreshBtn" title="Actualizar datos">↻</button>
+      <button class="btn ghost" id="refreshBtn" title="Actualizar desde CSV" aria-label="Actualizar">↻</button>
     </div>
   </header>
 
-  <nav class="tabs">
-    <button class="tab active" data-view="inventario">
-      <span class="ico ico-seed"></span>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-view="inventario" role="tab" aria-selected="true">
+      <span class="ico ico-seed" aria-hidden="true"></span>
       Inventario
     </button>
-    <button class="tab" data-view="calendario">
-      <span class="ico ico-calendar"></span>
+    <button class="tab" data-view="calendario" role="tab" aria-selected="false">
+      <span class="ico ico-calendar" aria-hidden="true"></span>
       Calendario
     </button>
-    <button class="tab" data-view="reportes">
-      <span class="ico ico-report"></span>
+    <button class="tab" data-view="reportes" role="tab" aria-selected="false">
+      <span class="ico ico-report" aria-hidden="true"></span>
       Reportes
     </button>
-    <button class="tab" data-view="config">
-      <span class="ico ico-settings"></span>
+    <button class="tab" data-view="config" role="tab" aria-selected="false">
+      <span class="ico ico-settings" aria-hidden="true"></span>
       Configuración
     </button>
   </nav>
 
   <main>
     <!-- INVENTARIO -->
-    <section class="view active" id="view-inventario">
+    <section class="view active" id="view-inventario" aria-labelledby="Inventario">
       <div class="toolbar">
         <div class="left">
-          <button class="btn grad-green" id="addSeedBtn"><span class="ico ico-plus"></span> Añadir semilla</button>
-          <button class="btn grad-blue" id="importBtn"><span class="ico ico-import"></span> Importar</button>
-          <button class="btn grad-orange" id="exportBtn"><span class="ico ico-export"></span> Exportar</button>
+          <button class="btn grad-green" id="addSeedBtn"><span class="ico ico-plus" aria-hidden="true"></span> Añadir semilla</button>
+          <input id="filePicker" type="file" accept=".csv,text/csv" hidden>
+          <button class="btn grad-blue" id="importBtn"><span class="ico ico-import" aria-hidden="true"></span> Importar CSV</button>
+          <button class="btn grad-orange" id="exportBtn"><span class="ico ico-export" aria-hidden="true"></span> Exportar</button>
         </div>
         <div class="right">
           <div class="chips" id="chips">
             <button class="chip" data-filter="interior">Interior</button>
             <button class="chip" data-filter="exterior">Exterior</button>
             <button class="chip" data-filter="rápida">Rápida</button>
-            <button class="chip" data-filter="otoño-invierno">Otoño‑Invierno</button>
+            <button class="chip" data-filter="otoño-invierno">Otoño-Invierno</button>
             <button class="chip" data-filter="hidropónico">Hidropónico</button>
             <button class="chip clear" id="clearFilters">Limpiar</button>
           </div>
@@ -62,7 +63,7 @@
       </div>
 
       <div id="seed-count" class="count"></div>
-      <div id="seed-list" class="grid"></div>
+      <div id="seed-list" class="grid" aria-live="polite"></div>
       <div id="empty" class="empty hidden">Sin resultados para tu búsqueda / filtros.</div>
     </section>
 
@@ -76,7 +77,7 @@
             <span class="pill pill-ext">Exterior</span>
           </div>
         </div>
-        <div class="grid grid-7">
+        <div class="grid-7">
           <div class="cell"><div class="day">Lun</div><span class="tag int">Siembra interior</span></div>
           <div class="cell"><div class="day">Mar</div><span class="tag ext">Trasplante</span></div>
           <div class="cell"><div class="day">Mié</div><span class="tag ext">Siembra exterior</span></div>
@@ -92,8 +93,11 @@
     <section class="view" id="view-reportes">
       <div class="card">
         <h2><span class="ico ico-report"></span> Reportes</h2>
-        <p>Pronto: exportar PDF/CSV de inventario, germinación y trazabilidad.</p>
-        <button class="btn grad-purple" id="downloadCSV">Descargar CSV (semillas)</button>
+        <p>Exporta CSV del inventario actual o imprime la vista.</p>
+        <div class="actions">
+          <button class="btn grad-purple" id="downloadCSV">Descargar CSV (semillas)</button>
+          <button class="btn grad-pink" id="printView">Imprimir</button>
+        </div>
       </div>
     </section>
 
@@ -101,10 +105,23 @@
     <section class="view" id="view-config">
       <div class="card">
         <h2><span class="ico ico-settings"></span> Configuración</h2>
-        <p>Ajusta colores, etiquetas y columnas visibles. (Mock para integrar con tu estructura actual.)</p>
+        <p>Reemplaza la URL de CSV por la de tu Google Sheets publicado.</p>
+        <pre class="code">const CSV_URL = "data/seeds.csv"; // ← cambia por tu URL de Google Sheets CSV</pre>
+        <p><label><input type="checkbox" id="readonlyToggle"> Modo solo lectura (oculta añadir/borrar)</label></p>
       </div>
     </section>
   </main>
+
+  <!-- DETALLE (drawer) -->
+  <aside id="detailDrawer" aria-hidden="true">
+    <div class="drawer">
+      <header>
+        <h3 id="detailTitle">Ficha de semilla</h3>
+        <button id="closeDrawer" class="btn ghost">Cerrar</button>
+      </header>
+      <div id="detailBody" class="drawer-body"></div>
+    </div>
+  </aside>
 
   <!-- MODAL: Añadir semilla -->
   <dialog id="addSeedModal">
@@ -112,7 +129,7 @@
       <header>
         <h3><span class="ico ico-plus"></span> Nueva semilla</h3>
       </header>
-      <div class="grid grid-2">
+      <div class="grid-2">
         <label>Nombre<input required name="name" placeholder="Ej: Lechuga Morada"/></label>
         <label>Especie<input name="species" placeholder="Ej: Lactuca sativa"/></label>
         <label>Germinación mín (días)<input type="number" min="0" name="gmin" value="5"/></label>
@@ -134,6 +151,6 @@
     <small>© Banco de Semillas — Liceo Bicentenario San Nicolás.</small>
   </footer>
 
-  <script src="js/app.js"></script>
+  <script src="js/app_csv_v2.js"></script>
 </body>
 </html>

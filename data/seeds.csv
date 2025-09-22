@@ -1,0 +1,11 @@
+name,species,germination_min,germination_max,indoor,outdoor,sowing,notes,tags
+Rúcula,Eruca sativa,4,7,1,1,"Siembra directa o almácigo; trasplante cuando 3-4 hojas verdaderas.","rápida|tolerante a fresco|ideal interior y exterior","interior|exterior|rápida"
+Tomate Cal Ace,Solanum lycopersicum,6,10,1,1,"Almácigo en interior; trasplante al exterior cuando no haya heladas.","requiere tutor|pleno sol","interior|exterior|verano"
+Tomate Pera,Solanum lycopersicum,6,10,1,1,"Almácigo en interior; trasplante cuando 15–20 cm.","buena para salsa|riego regular","interior|exterior"
+Tomate Cherry Perita Amarillo,"Solanum lycopersicum var. cerasiforme",6,10,1,1,"Almácigo; trasplante con clima templado.","fruto pequeño amarillo|muy productivo","interior|exterior"
+Pimentón Asti,Capsicum annuum,7,14,1,1,"Almácigo cálido; trasplante con noches >10 °C.","requiere calor|evitar heladas","interior|exterior|cálido"
+Brócoli,Brassica oleracea var. italica,5,10,1,1,"Almácigo o directa; prefiere clima fresco.","prefiere temperaturas frescas","interior|exterior|otoño-invierno"
+Berro,Nasturtium officinale,7,14,1,1,"Siembra húmeda constante; ideal sistemas de agua.","ama humedad|ideal para NFT/acuaponía","interior|exterior|hidropónico"
+Lechuga Morada,Lactuca sativa,4,8,1,1,"Siembra directa o almácigo; trasplante con 3-4 hojas.","rápida|tolerante a fresco","interior|exterior|rápida"
+Tomate Rosado,Solanum lycopersicum,6,10,1,1,"Almácigo; trasplante sin riesgo de heladas.","fruto grande|sabor dulce","interior|exterior"
+Achicoria,Cichorium intybus,7,14,1,1,"Siembra directa o almácigo; clima fresco.","rústica|amarga agradable","interior|exterior|otoño-invierno"
