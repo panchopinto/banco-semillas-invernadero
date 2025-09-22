@@ -7,8 +7,10 @@
   <link rel="stylesheet" href="css/styles.css"/>
   <link rel="icon" href="img/seedling.svg" type="image/svg+xml"/>
   <script defer src="js/app.js"></script>
+  <link rel="stylesheet" href="css/vivo.css">
 </head>
 <body>
+  <div class="container"><input id="search" type="search" placeholder="Buscar semillas, especies, notas…" aria-label="Buscar" /></div>
 <header class="topbar">
   <div class="brand">
     <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
@@ -45,15 +47,15 @@
 </header>
 
 <div class="a11y-toolbar" role="region" aria-label="Herramientas de accesibilidad">
-  <button class="btn" id="a11y-cvd" title="Modo daltónicos (paleta + patrones)">🧩 Daltónicos</button>
-  <button class="btn" id="a11y-reset" title="Restablecer estilos y preferencias">♻️ Reset estilos</button>
+  
+  
   <button class="btn" id="a11y-contrast" title="Activar/Desactivar alto contraste">🌓 Alto contraste</button>
   <button class="btn" id="a11y-font-plus" title="Aumentar tamaño de fuente">🔎 A+</button>
   <button class="btn" id="a11y-font-minus" title="Disminuir tamaño de fuente">🔎 A−</button>
-  <button class="btn" id="a11y-readable" title="Modo lectura amigable">📖 Lectura</button>
+  
   <button class="btn" id="a11y-theme-garden" title="Fondo verde tipo invernadero">🌿 Fondo verde</button>
-  <button class="btn" id="a11y-theme-light" title="Tema claro">🌞 Tema claro</button>
-  <button class="btn" id="a11y-theme-dark" title="Tema oscuro">🌙 Tema oscuro</button>
+  
+  
 </div>
 
 
@@ -114,7 +116,7 @@
       <canvas id="chartTipos" width="360" height="260" aria-label="Distribución por tipo"></canvas>
       <hr/>
       <h3>Calendario sugerido</h3>
-      <div id="calendar" class="calendar"></div>
+      <div id="calendar" class="calendar" class="cal-sugerido"></div>
     </aside>
 
     <section class="card table">
@@ -225,5 +227,15 @@ document.querySelector('.year').textContent = new Date().getFullYear();
 const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Santiago";
 document.getElementById('today').textContent = new Date().toLocaleString('es-CL', { dateStyle:'full', timeStyle:'short' }) + " · " + tz;
 </script>
+
+  <section class="section container">
+    <h2>Semillas destacadas</h2>
+    <div id="seed-list" class="grid"></div>
+    <div id="empty" class="empty hidden">Sin resultados para tu búsqueda.</div>
+  </section>
+
+  <script src="js/cleanup.js"></script>
+  <script src="js/search.js"></script>
+  <script src="js/calendar.js"></script>
 </body>
 </html>
