@@ -7,112 +7,150 @@
   <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <header class="topbar" role="banner">
+  <header class="topbar">
     <div class="brand">
-      <div class="logo" aria-hidden="true"></div>
+      <div class="logo"></div>
       <div>
         <h1>Banco de Semillas</h1>
         <p class="subtitle">Invernadero • Gestión y seguimiento</p>
       </div>
     </div>
     <div class="actions-right">
-      <input id="search" type="search" placeholder="Buscar semillas, especies, tags…" aria-label="Buscar" />
+      <input id="search" type="search" placeholder="🔎 Buscar por nombre, especie, etiqueta…" aria-label="Buscar" />
       <button class="btn ghost" id="refreshBtn" title="Actualizar desde CSV" aria-label="Actualizar">↻</button>
     </div>
   </header>
 
-  <nav class="tabs" role="tablist">
-    <button class="tab active" data-view="inventario" role="tab" aria-selected="true">
-      <span class="ico ico-seed" aria-hidden="true"></span>
-      Inventario
-    </button>
-    <button class="tab" data-view="calendario" role="tab" aria-selected="false">
-      <span class="ico ico-calendar" aria-hidden="true"></span>
-      Calendario
-    </button>
-    <button class="tab" data-view="reportes" role="tab" aria-selected="false">
-      <span class="ico ico-report" aria-hidden="true"></span>
-      Reportes
-    </button>
-    <button class="tab" data-view="config" role="tab" aria-selected="false">
-      <span class="ico ico-settings" aria-hidden="true"></span>
-      Configuración
-    </button>
+  <nav class="tabs">
+    <button class="tab active" data-view="inventario"><span class="ico ico-seed"></span> Inventario</button>
+    <button class="tab" data-view="calendario"><span class="ico ico-calendar"></span> Calendario</button>
+    <button class="tab" data-view="reportes"><span class="ico ico-report"></span> Reportes</button>
+    <button class="tab" data-view="config"><span class="ico ico-settings"></span> Configuración</button>
   </nav>
 
   <main>
-    <!-- INVENTARIO -->
-    <section class="view active" id="view-inventario" aria-labelledby="Inventario">
+    <!-- KPIs -->
+    <section class="kpis" id="kpis">
+      <div class="kpi grad-green">
+        <div class="kpi-icon">📦</div>
+        <div class="kpi-body">
+          <div class="kpi-title">Variedades</div>
+          <div class="kpi-value" id="kpi-variedades">—</div>
+        </div>
+      </div>
+      <div class="kpi grad-blue">
+        <div class="kpi-icon">📊</div>
+        <div class="kpi-body">
+          <div class="kpi-title">Stock total</div>
+          <div class="kpi-value" id="kpi-stock">—</div>
+        </div>
+      </div>
+      <div class="kpi grad-orange">
+        <div class="kpi-icon">⏳</div>
+        <div class="kpi-body">
+          <div class="kpi-title">Próx. a caducar</div>
+          <div class="kpi-value" id="kpi-caducar">—</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Inventario -->
+    <section class="view active" id="view-inventario">
       <div class="toolbar">
         <div class="left">
-          <button class="btn grad-green" id="addSeedBtn"><span class="ico ico-plus" aria-hidden="true"></span> Añadir semilla</button>
+          <button class="btn grad-green" id="addSeedBtn">➕ Añadir</button>
           <input id="filePicker" type="file" accept=".csv,text/csv" hidden>
-          <button class="btn grad-blue" id="importBtn"><span class="ico ico-import" aria-hidden="true"></span> Importar CSV</button>
-          <button class="btn grad-orange" id="exportBtn"><span class="ico ico-export" aria-hidden="true"></span> Exportar</button>
+          <button class="btn grad-blue" id="importBtn">📥 Importar CSV</button>
+          <button class="btn grad-orange" id="exportBtn">📤 Exportar</button>
+          <button class="btn grad-purple" id="toggleViewBtn">🧭 Tabla</button>
         </div>
         <div class="right">
-          <div class="chips" id="chips">
-            <button class="chip" data-filter="interior">Interior</button>
-            <button class="chip" data-filter="exterior">Exterior</button>
-            <button class="chip" data-filter="rápida">Rápida</button>
-            <button class="chip" data-filter="otoño-invierno">Otoño-Invierno</button>
-            <button class="chip" data-filter="hidropónico">Hidropónico</button>
-            <button class="chip clear" id="clearFilters">Limpiar</button>
+          <div class="filters">
+            <select id="filterTipo" aria-label="Filtrar por tipo">
+              <option value="">Tipo</option>
+              <option>Hoja</option><option>Fruto</option><option>Flor</option><option>Raíz</option><option>Bulbo</option>
+            </select>
+            <select id="filterCiclo" aria-label="Filtrar por ciclo">
+              <option value="">Ciclo</option>
+              <option>Anual</option><option>Bianual</option><option>Perenne</option>
+            </select>
+            <select id="filterEpoca" aria-label="Filtrar por época siembra">
+              <option value="">Época</option>
+              <option>Primavera</option><option>Verano</option><option>Otoño</option><option>Invierno</option>
+            </select>
+            <select id="filterEtiqueta" aria-label="Filtrar por etiqueta">
+              <option value="">Etiqueta</option>
+              <option>PIE</option><option>orgánica</option><option>semilla propia</option>
+            </select>
+            <button class="btn ghost" id="clearFilters">♻️ Limpiar</button>
           </div>
         </div>
       </div>
 
       <div id="seed-count" class="count"></div>
-      <div id="seed-list" class="grid" aria-live="polite"></div>
+
+      <!-- Grid cards -->
+      <div id="seed-grid" class="grid"></div>
       <div id="empty" class="empty hidden">Sin resultados para tu búsqueda / filtros.</div>
+
+      <!-- Table view -->
+      <div id="tableWrap" class="hidden">
+        <table class="table" id="seed-table" aria-label="Tabla de semillas">
+          <thead>
+            <tr>
+              <th>QR</th>
+              <th>Nombre</th>
+              <th>Científico</th>
+              <th>Tipo</th>
+              <th>Periodos</th>
+              <th>Germinación</th>
+              <th>Prof./Dist.</th>
+              <th>Riego</th>
+              <th>Ubicación</th>
+              <th>Stock</th>
+              <th>Responsable</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
 
-    <!-- CALENDARIO -->
+    <!-- Calendario -->
     <section class="view" id="view-calendario">
       <div class="calendar card">
         <div class="cal-header">
-          <h2><span class="ico ico-calendar"></span> Calendario de siembra (sugerido)</h2>
-          <div class="legend">
-            <span class="pill pill-int">Interior</span>
-            <span class="pill pill-ext">Exterior</span>
-          </div>
+          <h2>📅 Siembras sugeridas — próximos 6 meses</h2>
         </div>
-        <div class="grid-7">
-          <div class="cell"><div class="day">Lun</div><span class="tag int">Siembra interior</span></div>
-          <div class="cell"><div class="day">Mar</div><span class="tag ext">Trasplante</span></div>
-          <div class="cell"><div class="day">Mié</div><span class="tag ext">Siembra exterior</span></div>
-          <div class="cell"><div class="day">Jue</div><span class="tag int">Aclareo</span></div>
-          <div class="cell"><div class="day">Vie</div><span class="tag ext">Riego/fertilización</span></div>
-          <div class="cell"><div class="day">Sáb</div><span class="tag ext">Control plagas</span></div>
-          <div class="cell"><div class="day">Dom</div><span class="tag int">Revisión/registro</span></div>
-        </div>
+        <div id="calGrid" class="grid-6"></div>
       </div>
     </section>
 
-    <!-- REPORTES -->
+    <!-- Reportes -->
     <section class="view" id="view-reportes">
       <div class="card">
-        <h2><span class="ico ico-report"></span> Reportes</h2>
+        <h2>📊 Reportes</h2>
         <p>Exporta CSV del inventario actual o imprime la vista.</p>
         <div class="actions">
-          <button class="btn grad-purple" id="downloadCSV">Descargar CSV (semillas)</button>
-          <button class="btn grad-pink" id="printView">Imprimir</button>
+          <button class="btn grad-purple" id="downloadCSV">📤 Exportar CSV</button>
+          <button class="btn grad-pink" id="printView">🖨️ Imprimir</button>
         </div>
       </div>
     </section>
 
-    <!-- CONFIG -->
+    <!-- Config -->
     <section class="view" id="view-config">
       <div class="card">
-        <h2><span class="ico ico-settings"></span> Configuración</h2>
-        <p>Reemplaza la URL de CSV por la de tu Google Sheets publicado.</p>
-        <pre class="code">const CSV_URL = "data/seeds.csv"; // ← cambia por tu URL de Google Sheets CSV</pre>
-        <p><label><input type="checkbox" id="readonlyToggle"> Modo solo lectura (oculta añadir/borrar)</label></p>
+        <h2>⚙️ Configuración</h2>
+        <p>Reemplaza la URL del CSV por tu Google Sheets publicado:</p>
+        <pre class="code">const CSV_URL = "data/seeds.csv";</pre>
+        <label><input type="checkbox" id="readonlyToggle"> Modo solo lectura</label>
       </div>
     </section>
   </main>
 
-  <!-- DETALLE (drawer) -->
+  <!-- Drawer detalle -->
   <aside id="detailDrawer" aria-hidden="true">
     <div class="drawer">
       <header>
@@ -123,27 +161,38 @@
     </div>
   </aside>
 
-  <!-- MODAL: Añadir semilla -->
-  <dialog id="addSeedModal">
-    <form method="dialog" class="modal">
-      <header>
-        <h3><span class="ico ico-plus"></span> Nueva semilla</h3>
-      </header>
+  <!-- Modal Añadir/Editar -->
+  <dialog id="seedModal">
+    <form method="dialog" class="modal" id="seedForm" novalidate>
+      <header><h3 id="modalTitle">➕ Semilla</h3></header>
       <div class="grid-2">
-        <label>Nombre<input required name="name" placeholder="Ej: Lechuga Morada"/></label>
-        <label>Especie<input name="species" placeholder="Ej: Lactuca sativa"/></label>
+        <label>Nombre<input required name="name" /></label>
+        <label>Especie<input name="species" /></label>
+        <label>Tipo<select name="type"><option></option><option>Hoja</option><option>Fruto</option><option>Flor</option><option>Raíz</option><option>Bulbo</option></select></label>
+        <label>Ciclo<select name="cycle"><option></option><option>Anual</option><option>Bianual</option><option>Perenne</option></select></label>
         <label>Germinación mín (días)<input type="number" min="0" name="gmin" value="5"/></label>
         <label>Germinación máx (días)<input type="number" min="0" name="gmax" value="10"/></label>
+        <label>Profundidad siembra<input name="depth" placeholder="mm/cm"/></label>
+        <label>Distancia plantas<input name="spacing" placeholder="cm"/></label>
+        <label>Riego<input name="watering" placeholder="bajo/medio/alto"/></label>
+        <label>Ubicación<input name="location" placeholder="invernadero, cantero A, etc."/></label>
+        <label>Stock<input type="number" min="0" name="stock" value="0"/></label>
+        <label>Periodo siembra<input name="periodo_siembra" placeholder="Ene-Feb, Sep-Nov"/></label>
+        <label>Periodo trasplante<input name="periodo_trasplante" placeholder="Meses"/></label>
         <label>Interior<input type="checkbox" name="indoor" checked/></label>
         <label>Exterior<input type="checkbox" name="outdoor" checked/></label>
         <label class="full">Siembra<textarea name="sowing" rows="2" placeholder="Cómo sembrar…"></textarea></label>
-        <label class="full">Notas (coma separada)<input name="notes" placeholder="rápida, tolera fresco"/></label>
-        <label class="full">Tags (coma separada)<input name="tags" placeholder="interior,rápida"/></label>
+        <label class="full">Notas<input name="notes" placeholder="separadas por coma"/></label>
+        <label class="full">Etiquetas<input name="tags" placeholder="PIE, orgánica, semilla propia"/></label>
+        <label>Profesor responsable<input name="responsable" /></label>
+        <label>Curso/Proyecto<input name="curso" /></label>
+        <label class="full">Uso previsto<textarea name="uso" rows="2"></textarea></label>
       </div>
       <footer class="modal-actions">
         <button class="btn ghost" value="cancel">Cancelar</button>
         <button class="btn grad-green" id="saveSeedBtn" value="default">Guardar</button>
       </footer>
+      <p class="form-error hidden" id="formError">Revisa los campos obligatorios.</p>
     </form>
   </dialog>
 
@@ -151,6 +200,6 @@
     <small>© Banco de Semillas — Liceo Bicentenario San Nicolás.</small>
   </footer>
 
-  <script src="js/app_csv_v2.js"></script>
+  <script src="js/app_csv_v3.js"></script>
 </body>
 </html>

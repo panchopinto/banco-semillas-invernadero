@@ -1,19 +1,27 @@
-Banco de Semillas — Dashboard (CSV v2)
+Banco de Semillas — Dashboard (CSV v3)
 ======================================
-Mejoras:
-- **Borrar** registros (confirmación). *No toca tu CSV remoto; guarda en LocalStorage para no romper producción.*
-- **Detalle** por semilla en **drawer** (especie, germinación, interior/exterior, siembra, notas, tags).
-- **Importar CSV** desde archivo — fusiona en memoria.
-- **Persistencia local**: Añadidos y borrados sobreviven recarga.
-- **Modo Solo Lectura** (Config) — oculta Añadir/Borrar para vista de colegas/administrativos.
-- Botones conectados: Refresh (resetea a CSV), Exportar (CSV), Imprimir (vista actual).
 
-Cómo conectar a Google Sheets
------------------------------
-1) Publica tu hoja como CSV (Archivo → Compartir → Publicar en la web → CSV).
-2) Reemplaza en `js/app_csv_v2.js`: `const CSV_URL = "data/seeds.csv"` por tu URL pública.
+Incluye:
+- 📊 KPIs (Variedades, Stock, Próximas a caducar)
+- 🔎 Búsqueda + filtros por Tipo, Ciclo, Época, Etiquetas
+- 🧭 Vista **Tabla** con columnas administrativas
+- ➕/✏️ Modal con validación y nuevos campos (Responsable, Curso/Proyecto, Uso)
+- 📥/📤 Importar/Exportar CSV (compatible con Google Sheets)
+- 📅 Calendario próximos 6 meses según `periodo_siembra`
+- 🎯 QR por semilla (copia enlace)
+- 🎨 Botones multicolor con iconos
 
-Notas
------
-- Para un entorno multiusuario real (varios profes a la vez), conviene un backend (Sheet API con Apps Script o supabase).
-- El borrado actual es "no destructivo": se registra en LocalStorage y se aplica sobre los datos del CSV base.
+Conectar a Google Sheets
+------------------------
+Publica el sheet como CSV y reemplaza en `js/app_csv_v3.js`:
+  const CSV_URL = "data/seeds.csv";
+
+CSV esperado (cabeceras recomendadas)
+-------------------------------------
+name,species,type,cycle,periodo_siembra,periodo_trasplante,
+germination_min,germination_max,depth,spacing,watering,location,stock,
+responsable,curso,uso,indoor,outdoor,sowing,notes,tags,qr
+
+Seguridad / vista pública
+-------------------------
+Activa **Modo solo lectura** en Config para ocultar Añadir/Borrar. Para multiusuario real, conviene backend (Apps Script/Sheets API).
