@@ -4,238 +4,136 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Banco de Semillas — Dashboard</title>
-  <link rel="stylesheet" href="css/styles.css"/>
-  <link rel="icon" href="img/seedling.svg" type="image/svg+xml"/>
-  <script defer src="js/app.js"></script>
-  <link rel="stylesheet" href="css/vivo.css">
+  <link rel="stylesheet" href="css/dashboard.css">
 </head>
 <body>
-  <div class="container"><input id="search" type="search" placeholder="Buscar semillas, especies, notas…" aria-label="Buscar" /></div>
-<header class="topbar">
-  <div class="brand">
-    <svg class="logo" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M12 22c4-4 6-8 6-12a6 6 0 0 0-12 0c0 4 2 8 6 12z"></path>
-      <circle cx="12" cy="7.2" r="1.6"></circle>
-    </svg>
-    <div>
-      <h1>Banco de Semillas</h1>
-      <small id="today"></small>
-    </div>
-  </div>
-
-  <div class="actions tabs">
-    <button class="btn grad-green" id="btn-add">
-      <span class="icon">🌱</span> Añadir semilla
-    </button>
-    <button class="btn grad-blue" id="btn-import">
-      <span class="icon">📥</span> Importar CSV
-    </button>
-    <button class="btn grad-orange" id="btn-export">
-      <span class="icon">📤</span> Exportar CSV
-    </button>
-    <button class="btn grad-purple" id="btn-calendar">
-      <span class="icon">📅</span> Calendario de siembras
-    </button>
-    <button class="btn grad-teal" id="btn-reset">
-      <span class="icon">🧹</span> Limpiar filtro
-    </button>
-    <button class="btn grad-pink" id="btn-theme">
-      <span class="icon">🌓</span> Tema
-    </button>
-    <input type="file" id="file-input" accept=".csv" hidden />
-  </div>
-</header>
-
-<div class="a11y-toolbar" role="region" aria-label="Herramientas de accesibilidad">
-  
-  
-  <button class="btn" id="a11y-contrast" title="Activar/Desactivar alto contraste">🌓 Alto contraste</button>
-  <button class="btn" id="a11y-font-plus" title="Aumentar tamaño de fuente">🔎 A+</button>
-  <button class="btn" id="a11y-font-minus" title="Disminuir tamaño de fuente">🔎 A−</button>
-  
-  <button class="btn" id="a11y-theme-garden" title="Fondo verde tipo invernadero">🌿 Fondo verde</button>
-  
-  
-</div>
-
-
-<main>
-  <section class="kpis">
-    <div class="kpi card">
-      <div class="kpi-label">Total variedades</div>
-      <div class="kpi-value" id="kpi-total">0</div>
-    </div>
-    <div class="kpi card">
-      <div class="kpi-label">Tipos (distribución)</div>
-      <div class="kpi-value" id="kpi-tipos">—</div>
-    </div>
-    <div class="kpi card">
-      <div class="kpi-label">Stock (sobres)</div>
-      <div class="kpi-value" id="kpi-stock">0</div>
-    </div>
-    <div class="kpi card warn">
-      <div class="kpi-label">Próximas a caducar</div>
-      <div class="kpi-value" id="kpi-exp">0</div>
-    </div>
-  </section>
-
-  <section class="filters card">
-    <div class="row">
-      <input id="q" class="input" placeholder="Buscar por nombre, científico, familia, notas…"/>
-      <select id="f-tipo" class="select">
-        <option value="">Tipo (todos)</option>
-        <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
-        <option>Flor</option><option>Legumbre/Grano</option><option>Nativo</option>
-      </select>
-      <select id="f-familia" class="select">
-        <option value="">Familia (todas)</option>
-      </select>
-      <select id="f-ciclo" class="select">
-        <option value="">Ciclo (todos)</option>
-        <option>Anual</option><option>Bianual</option><option>Perenne</option>
-      </select>
-      <select id="f-epoca" class="select">
-        <option value="">Época actual</option>
-        <option value="siembra">En época de siembra</option>
-        <option value="transplante">En época de trasplante</option>
-      </select>
-      <button class="btn grad-teal" id="btn-aplicar">Aplicar</button>
-    </div>
-    <div class="row wrap">
-      <label class="chip"><input type="checkbox" id="c-invernadero"/> Invernadero</label>
-      <label class="chip"><input type="checkbox" id="c-exterior"/> Exterior</label>
-      <label class="chip"><input type="checkbox" id="c-pie"/> PIE (adaptado)</label>
-      <label class="chip"><input type="checkbox" id="c-semilla-propia"/> Semilla propia</label>
-      <label class="chip"><input type="checkbox" id="c-organica"/> Orgánica</label>
-    </div>
-  </section>
-
-  <section class="grid">
-    <aside class="card side">
-      <h3>Resumen</h3>
-      <canvas id="chartTipos" width="360" height="260" aria-label="Distribución por tipo"></canvas>
-      <hr/>
-      <h3>Calendario sugerido</h3>
-      <div id="calendar" class="calendar" class="cal-sugerido"></div>
-    </aside>
-
-    <section class="card table">
-      <div class="table-head">
-        <div>Nombre común</div>
-        <div>Nombre científico</div>
-        <div>Familia</div>
-        <div>Tipo</div>
-        <div>Siembra</div>
-        <div>Germinación</div>
-        <div>Prof./Dist.</div>
-        <div>Riego</div>
-        <div>Ubicación</div>
-        <div>Stock</div>
-        <div>Responsable</div>
-        <div>Acciones</div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo"></div>
+      <div>
+        <h1>Banco de Semillas</h1>
+        <p class="subtitle">Invernadero • Gestión y seguimiento</p>
       </div>
-      <div id="rows" class="table-rows"></div>
+    </div>
+    <div class="actions-right">
+      <input id="search" type="search" placeholder="Buscar semillas, especies, tags…" aria-label="Buscar" />
+      <button class="btn ghost" id="refreshBtn" title="Actualizar datos">↻</button>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-view="inventario">
+      <span class="ico ico-seed"></span>
+      Inventario
+    </button>
+    <button class="tab" data-view="calendario">
+      <span class="ico ico-calendar"></span>
+      Calendario
+    </button>
+    <button class="tab" data-view="reportes">
+      <span class="ico ico-report"></span>
+      Reportes
+    </button>
+    <button class="tab" data-view="config">
+      <span class="ico ico-settings"></span>
+      Configuración
+    </button>
+  </nav>
+
+  <main>
+    <!-- INVENTARIO -->
+    <section class="view active" id="view-inventario">
+      <div class="toolbar">
+        <div class="left">
+          <button class="btn grad-green" id="addSeedBtn"><span class="ico ico-plus"></span> Añadir semilla</button>
+          <button class="btn grad-blue" id="importBtn"><span class="ico ico-import"></span> Importar</button>
+          <button class="btn grad-orange" id="exportBtn"><span class="ico ico-export"></span> Exportar</button>
+        </div>
+        <div class="right">
+          <div class="chips" id="chips">
+            <button class="chip" data-filter="interior">Interior</button>
+            <button class="chip" data-filter="exterior">Exterior</button>
+            <button class="chip" data-filter="rápida">Rápida</button>
+            <button class="chip" data-filter="otoño-invierno">Otoño‑Invierno</button>
+            <button class="chip" data-filter="hidropónico">Hidropónico</button>
+            <button class="chip clear" id="clearFilters">Limpiar</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="seed-count" class="count"></div>
+      <div id="seed-list" class="grid"></div>
+      <div id="empty" class="empty hidden">Sin resultados para tu búsqueda / filtros.</div>
     </section>
-  </section>
-</main>
 
-<footer>
-  <div>Creado por: Francisco Pinto Aravena — franciscoandresp@gmail.com</div>
-  <div>Este proyecto educativo apoya el PIE y la innovación en el invernadero.</div>
-  <div>© <span class="year"></span> Todos los derechos reservados.</div>
-</footer>
+    <!-- CALENDARIO -->
+    <section class="view" id="view-calendario">
+      <div class="calendar card">
+        <div class="cal-header">
+          <h2><span class="ico ico-calendar"></span> Calendario de siembra (sugerido)</h2>
+          <div class="legend">
+            <span class="pill pill-int">Interior</span>
+            <span class="pill pill-ext">Exterior</span>
+          </div>
+        </div>
+        <div class="grid grid-7">
+          <div class="cell"><div class="day">Lun</div><span class="tag int">Siembra interior</span></div>
+          <div class="cell"><div class="day">Mar</div><span class="tag ext">Trasplante</span></div>
+          <div class="cell"><div class="day">Mié</div><span class="tag ext">Siembra exterior</span></div>
+          <div class="cell"><div class="day">Jue</div><span class="tag int">Aclareo</span></div>
+          <div class="cell"><div class="day">Vie</div><span class="tag ext">Riego/fertilización</span></div>
+          <div class="cell"><div class="day">Sáb</div><span class="tag ext">Control plagas</span></div>
+          <div class="cell"><div class="day">Dom</div><span class="tag int">Revisión/registro</span></div>
+        </div>
+      </div>
+    </section>
 
-<!-- Modal -->
-<dialog id="modal">
-  <form id="form" method="dialog" class="modal card">
-    <h3 id="modal-title">Nueva semilla</h3>
-    <input type="hidden" id="id"/>
-    <div class="grid-form">
-      <label data-tip="Nombre con el que se conoce en el invernadero. Ej: Lechuga Romana.">Nombre común<input id="nombre" title="Nombre común de la semilla (ej: Lechuga Romana)" required/></label>
-      <label data-tip="Nombre botánico. Ej: Lactuca sativa.">Nombre científico<input id="cientifico" title="Nombre científico en latín (ej: Lactuca sativa)"/></label>
-      <label data-tip="Familia botánica. Ej: Asteraceae.">Familia<input id="familia" title="Familia botánica (ej: Asteraceae)"/></label>
-      <label data-tip="Clasificación general: hortaliza, frutal, nativa, etc.">Tipo<select id="tipo" title="Tipo de planta (hortaliza, frutal, hierba, etc.)" required>
-          <option>Hortaliza</option><option>Frutal</option><option>Hierba/Aromática</option>
-          <option>Flor</option><option>Legumbre/Grano</option><option>Nativo</option>
-        </select>
-      </label>
-      <label data-tip="Duración del cultivo (anual, bianual, perenne).">Ciclo<select id="ciclo" title="Duración del ciclo de vida de la planta">
-          <option>Anual</option><option>Bianual</option><option>Perenne</option>
-        </select>
-      </label>
-      <label>Periodo de siembra (meses, ej: sep-oct, mar-abr)<input id="siembra" title="Meses recomendados para siembra"/></label>
-      <label>Periodo de trasplante (opcional)<input id="trasplante" title="Meses recomendados para trasplante (si aplica)"/></label>
-      <label>Días germinación (ej: 7-14)<input id="germinacion" title="Tiempo estimado de germinación en días"/></label>
-      <label data-tip="Temperatura ideal del sustrato para germinar (°C).">Temp. germinación (°C)<input id="temp" title="Temperatura óptima de germinación en °C"/></label>
-      <label data-tip="Profundidad de cobertura de la semilla (cm).">Profundidad siembra (cm)<input id="prof" title="Profundidad de siembra en cm"/></label>
-      <label data-tip="Separación entre plantas (cm).">Distancia plantas (cm)<input id="dist" title="Distancia recomendada entre plantas en cm"/></label>
-      <label data-tip="Exposición recomendada (sol, semisombra, sombra).">Luz<select id="luz" title="Tipo de luz necesaria para crecer">
-          <option>Sol</option><option>Semisombra</option><option>Sombra</option>
-        </select>
-      </label>
-      <label data-tip="Necesidad de riego (bajo, medio, alto).">Riego<select id="riego" title="Nivel de riego recomendado">
-          <option>Bajo</option><option>Medio</option><option>Alto</option>
-        </select>
-      </label>
-      <label data-tip="Dónde guardar/ubicar las semillas.">Ubicación (estantería/caja)<input id="ubicacion" title="Ubicación física en el invernadero"/></label>
-      <label data-tip="Cantidad de sobres disponibles.">Stock (sobres)<input id="stock" title="Cantidad de sobres disponibles" type="number" min="0" value="1"/></label>
-      <label data-tip="Fecha o código de lote para trazabilidad.">Fecha recolección/lote<input id="lote" title="Código/lote de recolección"/></label>
-      <label data-tip="Años que conserva viabilidad en condiciones ideales.">Vida útil estimada (años)<input id="vida" title="Vida útil estimada de la semilla en años"/></label>
-      <label data-tip="Persona a cargo. Ej: Prof. Francisco Pinto.">Responsable/Profesor<input id="responsable" title="Responsable o profesor encargado"/></label>
-      <label data-tip="Curso o proyecto asignado. Ej: 3°A / Hidroponía.">Curso/Proyecto<input id="curso" title="Curso o proyecto asociado"/></label>
-      <label data-tip="Actividad o práctica donde se usará.">Uso previsto (actividad)<input id="uso" title="Uso previsto de la semilla"/></label>
-      <label data-tip="Cultivos que conviene asociar.">Compatibilidades/Asociaciones<input id="asocia" title="Plantas compatibles para asociación" placeholder="zanahoria + cebolla…"/></label>
-      <label data-tip="Cultivos que NO conviene mezclar.">Alelopatías/No combinar<input id="anti" title="Plantas a evitar por alelopatía" placeholder="no con…"/></label>
-      <label data-tip="Plagas frecuentes. Ej: pulgones.">Plagas comunes<input id="plagas" title="Plagas comunes que afectan a esta semilla"/></label>
-      <label data-tip="Tips de manejo o cuidados.">Recomendaciones<textarea id="reco" title="Recomendaciones adicionales" rows="2"></textarea></label>
-      <label data-tip="Observaciones generales.">Notas<textarea id="notas" title="Notas extra" rows="2"></textarea></label>
-      <label class="check"><input type="checkbox" id="pie" title="Indica si tiene adaptaciones PIE"/> Adaptaciones PIE</label>
-      <label class="check"><input type="checkbox" id="organica" title="Semilla producida con prácticas orgánicas"/> Semilla orgánica</label>
-      <label class="check"><input type="checkbox" id="propia" title="Semilla guardada de producción propia"/> Semilla propia</label>
-    </div>
-    <menu class="modal-actions">
-      <button type="reset" class="btn ghost" id="btn-cancel">Cancelar</button>
-      <button type="submit" class="btn grad-green" id="btn-save">Guardar</button>
-    </menu>
-  </form>
-</dialog>
+    <!-- REPORTES -->
+    <section class="view" id="view-reportes">
+      <div class="card">
+        <h2><span class="ico ico-report"></span> Reportes</h2>
+        <p>Pronto: exportar PDF/CSV de inventario, germinación y trazabilidad.</p>
+        <button class="btn grad-purple" id="downloadCSV">Descargar CSV (semillas)</button>
+      </div>
+    </section>
 
-<template id="row-tpl">
-  <div class="row">
-    <div class="cell nombre"></div>
-    <div class="cell cientifico"></div>
-    <div class="cell familia"></div>
-    <div class="cell tipo"></div>
-    <div class="cell siembra"></div>
-    <div class="cell germ"></div>
-    <div class="cell profdist"></div>
-    <div class="cell riego"></div>
-    <div class="cell ubicacion"></div>
-    <div class="cell stock"></div>
-    <div class="cell resp"></div>
-    <div class="cell actions">
-      <button class="icon-btn edit" title="Editar">✏️</button>
-      <button class="icon-btn del" title="Eliminar">🗑️</button>
-      <button class="icon-btn qr" title="QR detalle">🔗</button>
-    </div>
-  </div>
-</template>
+    <!-- CONFIG -->
+    <section class="view" id="view-config">
+      <div class="card">
+        <h2><span class="ico ico-settings"></span> Configuración</h2>
+        <p>Ajusta colores, etiquetas y columnas visibles. (Mock para integrar con tu estructura actual.)</p>
+      </div>
+    </section>
+  </main>
 
-<script>
-// fecha hoy (America/Santiago)
-document.querySelector('.year').textContent = new Date().getFullYear();
-const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "America/Santiago";
-document.getElementById('today').textContent = new Date().toLocaleString('es-CL', { dateStyle:'full', timeStyle:'short' }) + " · " + tz;
-</script>
+  <!-- MODAL: Añadir semilla -->
+  <dialog id="addSeedModal">
+    <form method="dialog" class="modal">
+      <header>
+        <h3><span class="ico ico-plus"></span> Nueva semilla</h3>
+      </header>
+      <div class="grid grid-2">
+        <label>Nombre<input required name="name" placeholder="Ej: Lechuga Morada"/></label>
+        <label>Especie<input name="species" placeholder="Ej: Lactuca sativa"/></label>
+        <label>Germinación mín (días)<input type="number" min="0" name="gmin" value="5"/></label>
+        <label>Germinación máx (días)<input type="number" min="0" name="gmax" value="10"/></label>
+        <label>Interior<input type="checkbox" name="indoor" checked/></label>
+        <label>Exterior<input type="checkbox" name="outdoor" checked/></label>
+        <label class="full">Siembra<textarea name="sowing" rows="2" placeholder="Cómo sembrar…"></textarea></label>
+        <label class="full">Notas (coma separada)<input name="notes" placeholder="rápida, tolera fresco"/></label>
+        <label class="full">Tags (coma separada)<input name="tags" placeholder="interior,rápida"/></label>
+      </div>
+      <footer class="modal-actions">
+        <button class="btn ghost" value="cancel">Cancelar</button>
+        <button class="btn grad-green" id="saveSeedBtn" value="default">Guardar</button>
+      </footer>
+    </form>
+  </dialog>
 
-  <section class="section container">
-    <h2>Semillas destacadas</h2>
-    <div id="seed-list" class="grid"></div>
-    <div id="empty" class="empty hidden">Sin resultados para tu búsqueda.</div>
-  </section>
+  <footer class="footer">
+    <small>© Banco de Semillas — Liceo Bicentenario San Nicolás.</small>
+  </footer>
 
-  <script src="js/cleanup.js"></script>
-  <script src="js/search.js"></script>
-  <script src="js/calendar.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>
