@@ -1,0 +1,62 @@
+
+:root{
+  --bg:#0b0f0c; --panel:#0f1712; --card:#111b14; --muted:#9bb5a3; --text:#eef5ef;
+  --accent:#22c55e; --accent-2:#84cc16; --accent-3:#14b8a6; --accent-4:#f59e0b; --danger:#ef4444;
+  --ring: 0 0 0 .12rem color-mix(in oklab, var(--accent), white 10%); --radius:16px;
+}
+@media (prefers-color-scheme: light){
+  :root{ --bg:#f7fff9; --panel:#ffffff; --card:#f5fff8; --text:#0b0f0c; --muted:#4b6354;
+    --ring: 0 0 0 .14rem color-mix(in oklab, var(--accent), black 15%); }
+}
+html,body{
+  background:
+    radial-gradient(1200px 600px at -10% -20%, color-mix(in oklab, var(--accent), transparent 75%), transparent 80%),
+    radial-gradient(900px 500px at 110% 120%, color-mix(in oklab, var(--accent-3), transparent 75%), transparent 80%),
+    var(--bg);
+  color:var(--text); min-height:100%;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", "Helvetica Neue", Arial;
+}
+.container{ max-width:1200px; margin:0 auto; padding:1.2rem; }
+.grid{ display:grid; gap:1rem; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.card{
+  background: linear-gradient(180deg, color-mix(in oklab, var(--card), white 6%), var(--card));
+  border:1px solid color-mix(in oklab, var(--accent), transparent 80%);
+  border-radius:var(--radius); box-shadow:0 8px 30px rgba(0,0,0,.25); overflow:hidden;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.card:hover{ transform:translateY(-2px); box-shadow:0 14px 36px rgba(0,0,0,.32);
+  border-color:color-mix(in oklab, var(--accent), transparent 50%); }
+.card .card-header{ padding:.9rem 1rem; display:flex; align-items:center; gap:.6rem;
+  background:linear-gradient(90deg, color-mix(in oklab, var(--accent), transparent 85%), transparent 80%);
+  border-bottom:1px dashed color-mix(in oklab, var(--accent), transparent 65%); }
+.card .card-title{ font-weight:700; letter-spacing:.2px; margin:0; }
+.card .card-body{ padding:1rem; color:var(--text); }
+.badge{ display:inline-flex; align-items:center; gap:.35rem; padding:.18rem .5rem; border-radius:999px; font-size:.78rem;
+  background:color-mix(in oklab, var(--accent), transparent 85%); border:1px solid color-mix(in oklab, var(--accent), transparent 60%); }
+.pill{ display:inline-flex; align-items:center; gap:.35rem; padding:.22rem .46rem; border-radius:999px; font-size:.74rem; font-weight:700;
+  background:color-mix(in oklab, var(--accent-3), transparent 83%); border:1px solid color-mix(in oklab, var(--accent-3), transparent 55%); }
+.input, input[type="search"], input[type="text"], select{ background:linear-gradient(180deg, color-mix(in oklab, var(--panel), white 6%), var(--panel));
+  border:1px solid color-mix(in oklab, var(--accent), transparent 70%); color:var(--text); padding:.7rem .85rem; border-radius:12px; outline:none; }
+.input:focus, input:focus, select:focus{ border-color:color-mix(in oklab, var(--accent), transparent 35%); box-shadow:var(--ring); }
+.empty{ padding:1rem; border:1px dashed color-mix(in oklab, var(--accent), transparent 70%); border-radius:12px; text-align:center; color:var(--muted); }
+.section{ margin-top:2rem; }
+.section h2{ margin:.25rem 0 1rem; }
+.calendar, .cal-sugerido{
+  --cal-bg: color-mix(in oklab, var(--panel), white 8%);
+  --cal-border: color-mix(in oklab, var(--accent), transparent 70%);
+  --cal-accent: var(--accent-2);
+  background:var(--cal-bg); border:1px solid var(--cal-border); border-radius:14px; padding:.8rem;
+  box-shadow:0 8px 26px rgba(0,0,0,.20);
+}
+.calendar .cal-header{ display:flex; align-items:center; justify-content:space-between; gap:.6rem; padding:.2rem .2rem .6rem;
+  border-bottom:1px dashed var(--cal-border); }
+.calendar .grid{ margin-top:.6rem; display:grid; grid-template-columns: repeat(7, 1fr); gap:.4rem; }
+.calendar .cell{ min-height:70px; padding:.45rem; border:1px solid var(--cal-border); border-radius:10px;
+  background:linear-gradient(180deg, color-mix(in oklab, var(--card), white 6%), var(--card)); position:relative; }
+.calendar .cell .day{ font-weight:700; font-size:.85rem; opacity:.9; }
+.calendar .tag{ font-size:.72rem; padding:.18rem .38rem; border-radius:999px;
+  background:color-mix(in oklab, var(--cal-accent), transparent 75%);
+  border:1px solid color-mix(in oklab, var(--cal-accent), transparent 55%); display:inline-block; margin:.2rem .2rem 0 0; }
+mark.find{ background:color-mix(in oklab, var(--accent-4), transparent 75%);
+  outline:1px solid color-mix(in oklab, var(--accent-4), transparent 45%); border-radius:4px; padding:.05rem .15rem; }
+.hidden{ display:none !important; }
