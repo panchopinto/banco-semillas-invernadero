@@ -1,0 +1,219 @@
+[
+  {
+    "name": "Rúcula",
+    "species": "Eruca sativa",
+    "germination": {
+      "days_min": 4,
+      "days_max": 7
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Siembra directa o almácigo; trasplante cuando 3-4 hojas verdaderas.",
+    "notes": [
+      "rápida",
+      "tolerante a fresco",
+      "ideal interior y exterior"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "rápida"
+    ]
+  },
+  {
+    "name": "Tomate Cal Ace",
+    "species": "Solanum lycopersicum",
+    "germination": {
+      "days_min": 6,
+      "days_max": 10
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo en interior; trasplante al exterior cuando no haya heladas.",
+    "notes": [
+      "requiere tutor",
+      "pleno sol"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "verano"
+    ]
+  },
+  {
+    "name": "Tomate Pera",
+    "species": "Solanum lycopersicum",
+    "germination": {
+      "days_min": 6,
+      "days_max": 10
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo en interior; trasplante cuando 15–20 cm.",
+    "notes": [
+      "buena para salsa",
+      "riego regular"
+    ],
+    "tags": [
+      "interior",
+      "exterior"
+    ]
+  },
+  {
+    "name": "Tomate Cherry Perita Amarillo",
+    "species": "Solanum lycopersicum var. cerasiforme",
+    "germination": {
+      "days_min": 6,
+      "days_max": 10
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo; trasplante con clima templado.",
+    "notes": [
+      "fruto pequeño amarillo",
+      "muy productivo"
+    ],
+    "tags": [
+      "interior",
+      "exterior"
+    ]
+  },
+  {
+    "name": "Pimentón Asti",
+    "species": "Capsicum annuum",
+    "germination": {
+      "days_min": 7,
+      "days_max": 14
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo cálido; trasplante con noches >10 °C.",
+    "notes": [
+      "requiere calor",
+      "evitar heladas"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "cálido"
+    ]
+  },
+  {
+    "name": "Brócoli",
+    "species": "Brassica oleracea var. italica",
+    "germination": {
+      "days_min": 5,
+      "days_max": 10
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo o directa; prefiere clima fresco.",
+    "notes": [
+      "prefiere temperaturas frescas"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "otoño-invierno"
+    ]
+  },
+  {
+    "name": "Berro",
+    "species": "Nasturtium officinale",
+    "germination": {
+      "days_min": 7,
+      "days_max": 14
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Siembra húmeda constante; ideal sistemas de agua.",
+    "notes": [
+      "ama humedad",
+      "ideal para NFT/acuaponía"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "hidropónico"
+    ]
+  },
+  {
+    "name": "Lechuga Morada",
+    "species": "Lactuca sativa",
+    "germination": {
+      "days_min": 4,
+      "days_max": 8
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Siembra directa o almácigo; trasplante con 3-4 hojas.",
+    "notes": [
+      "rápida",
+      "tolerante a fresco"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "rápida"
+    ]
+  },
+  {
+    "name": "Tomate Rosado",
+    "species": "Solanum lycopersicum",
+    "germination": {
+      "days_min": 6,
+      "days_max": 10
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Almácigo; trasplante sin riesgo de heladas.",
+    "notes": [
+      "fruto grande",
+      "sabor dulce"
+    ],
+    "tags": [
+      "interior",
+      "exterior"
+    ]
+  },
+  {
+    "name": "Achicoria",
+    "species": "Cichorium intybus",
+    "germination": {
+      "days_min": 7,
+      "days_max": 14
+    },
+    "grow": {
+      "indoor": true,
+      "outdoor": true
+    },
+    "sowing": "Siembra directa o almácigo; clima fresco.",
+    "notes": [
+      "rústica",
+      "amarga agradable"
+    ],
+    "tags": [
+      "interior",
+      "exterior",
+      "otoño-invierno"
+    ]
+  }
+]
