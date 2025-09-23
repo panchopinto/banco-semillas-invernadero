@@ -124,7 +124,7 @@ function cardTemplate(s){
       <div class="tags">${(s.tags||[]).map(t=>`<span class="pill">${t}</span>`).join('')}</div>
       <div class="actions">
         <button class="btn btn-detail" data-key="${key}">Detalle</button>
-        <button class="btn btn-delete" data-key="${key}">Borrar</button>
+        <button class="btn btn-delete" data-guard="owner" data-key="${key}">Borrar</button>
       </div>
     </article>
   `;
@@ -156,7 +156,12 @@ $('#detailDrawer')?.addEventListener('click', (e)=>{
 
 // Delete
 function onDelete(key){
-  if(state.readonly) return;
+  // Guard de rol (owner-only) usando ACCESS si está disponible
+  try {
+    const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
+    if (sess.role !== 'owner') { alert("No tienes permiso para borrar semillas."); return; }
+  } catch(e){ /* sin ACCESS => bloquear por defecto */ alert("Acción no disponible."); return; }
+if(state.readonly) return;
   const s = currentSeeds().find(x=>makeKey(x)===key);
   if(!s) return;
   const ok = confirm(`¿Borrar "${s.name}" (${s.species}) de la vista? Esto no elimina tu CSV original.`);
