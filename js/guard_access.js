@@ -54,7 +54,7 @@ function protectRestrictedViews(){
     const view = btn.getAttribute('data-view');
     if (blocked(view)){
       e.preventDefault(); e.stopPropagation();
-      console.warn("Acceso restringido: solo OWNER ("+view+")");
+      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
     }
   }, true);
 
@@ -63,7 +63,7 @@ function protectRestrictedViews(){
     const h = (location.hash||"").toLowerCase();
     const view = h.replace(/^#/, '');
     if (blocked(view)){
-      console.warn("Acceso restringido: solo OWNER");
+      alert("Acceso restringido: solo OWNER.");
       // vuelve a una vista segura (tarjetas/lista)
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
@@ -78,7 +78,7 @@ function protectRestrictedViews(){
     if (sess.role === 'owner') return;
     const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
     if (bad){
-      console.warn("Acceso restringido: solo OWNER");
+      alert("Acceso restringido: solo OWNER.");
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
     }
@@ -314,7 +314,7 @@ function protectRestrictedViews(){
     const view = btn.getAttribute('data-view');
     if (blocked(view)){
       e.preventDefault(); e.stopPropagation();
-      console.warn("Acceso restringido: solo OWNER ("+view+")");
+      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
     }
   }, true);
 
@@ -323,7 +323,7 @@ function protectRestrictedViews(){
     const h = (location.hash||"").toLowerCase();
     const view = h.replace(/^#/, '');
     if (blocked(view)){
-      console.warn("Acceso restringido: solo OWNER");
+      alert("Acceso restringido: solo OWNER.");
       // vuelve a una vista segura (tarjetas/lista)
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
@@ -338,7 +338,7 @@ function protectRestrictedViews(){
     if (sess.role === 'owner') return;
     const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
     if (bad){
-      console.warn("Acceso restringido: solo OWNER");
+      alert("Acceso restringido: solo OWNER.");
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
     }

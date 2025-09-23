@@ -21,7 +21,7 @@ body{
 .topbar{ position:sticky; top:0; z-index:50; display:flex; align-items:center; justify-content:space-between; gap:1rem;
   padding:.9rem 1.1rem; background: rgba(15,19,36,.72); backdrop-filter: blur(8px); border-bottom:1px solid #1f2742; }
 .brand{display:flex; gap:.8rem; align-items:center}
-.logo{width:38px; height:38px; border-radius:10px; background: conic-gradient(from 180deg,#00e676,#4f86ff,#ff8a00,#ff3d81,#7a5cff,#00e676); box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.logo{ width:44px; height:44px; border-radius:12px; background: url('../img/logo_seedling.svg') center/contain no-repeat; box-shadow:0 4px 14px rgba(0,0,0,.25);}
 .brand h1{font-size:1.1rem; margin:0}
 .subtitle{margin:.1rem 0 0; color:var(--muted); font-size:.85rem}
 .actions-right{display:flex; align-items:center; gap:.6rem}
