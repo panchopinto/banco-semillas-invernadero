@@ -27,6 +27,7 @@
     <button class="tab" data-view="calendario"><span class="ico ico-calendar"></span> Calendario</button>
     <button class="tab" data-view="reportes"><span class="ico ico-report"></span> Reportes</button>
     <button class="tab" data-view="config"><span class="ico ico-settings"></span> Configuración</button>
+    <button class="tab" data-view="historial" data-guard="owner"><span class="ico ico-clock"></span> Historial</button>
   </nav>
 
   <main>
@@ -149,7 +150,37 @@
         <label><input type="checkbox" id="readonlyToggle"> Modo solo lectura</label>
       </div>
     </section>
-  </main>
+  
+    <!-- Historial (owner) -->
+    <section id="view-historial" class="hidden">
+      <div class="card">
+        <h2>Historial de Accesos</h2>
+        <p class="muted">Solo visible para el propietario. Se registran accesos en este dispositivo: fecha/hora, correo, rol, IP pública y navegador.</p>
+        <div class="actions" style="margin:.5rem 0; display:flex; gap:.5rem; flex-wrap:wrap;">
+          <button id="hist-export" class="btn" data-guard="owner">Exportar CSV</button>
+          <button id="hist-clear" class="btn btn-delete" data-guard="owner">Vaciar historial (este dispositivo)</button>
+          <button id="hist-refresh" class="btn" data-guard="owner">Refrescar</button>
+        </div>
+        <div class="table-wrap">
+          <table id="hist-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Correo</th>
+                <th>Rol</th>
+                <th>IP pública</th>
+                <th>Navegador</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+    
+</main>
 
   <footer class="site-footer">
     <p>Creado por: <strong>Francisco Pinto Aravena</strong> — <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a><br/>

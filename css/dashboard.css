@@ -139,3 +139,11 @@ mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
   .card .header .title { font-size: 1rem; }
   .fruit-ico-td { font-size: 1.05rem; }
 }
+
+
+/* === Historial de accesos === */
+#hist-table { width:100%; border-collapse: collapse; }
+#hist-table th, #hist-table td { border-bottom:1px solid #2b2b2b; padding:.5rem .6rem; text-align:left; }
+#hist-table thead th { position:sticky; top:0; background:#111; z-index:1; }
+#hist-table tbody tr:hover { background:#171717; }
+.table-wrap { overflow:auto; max-height: 55vh; }
