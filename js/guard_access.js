@@ -93,103 +93,6 @@ if (document.readyState === 'loading') {
   protectRestrictedViews();
 }
 
-
-// === Historial de accesos (local en este dispositivo) ===
-window.AccessLog = (function(){
-  const LS_KEY = "access_log_v1";
-  let data = [];
-  function load(){ try{ data = JSON.parse(localStorage.getItem(LS_KEY)||"[]"); }catch(_){ data=[]; } }
-  function save(){ localStorage.setItem(LS_KEY, JSON.stringify(data)); }
-  function nowParts(){
-    const d = new Date();
-    const fecha = d.toLocaleDateString();
-    const hora  = d.toLocaleTimeString();
-    const iso   = d.toISOString();
-    return {fecha, hora, iso};
-  }
-  async function publicIP(){
-    try{ const r = await fetch("https://api.ipify.org?format=json", {cache:"no-store"}); const j = await r.json(); return j.ip||""; }
-    catch(_){ return ""; }
-  }
-  async function logAccess(reason){
-    load();
-    const sess = ACCESS.getSession ? ACCESS.getSession() : {email:null, role:"viewer"};
-    const parts = nowParts();
-    const ua = (navigator.userAgent||"").slice(0,160);
-    let ip = "";
-    try { ip = await publicIP(); } catch(_){ ip=""; }
-    data.push({ts: parts.iso, fecha:parts.fecha, hora:parts.hora, email:sess.email||"", role:sess.role||"viewer", ip, ua, reason: reason||""});
-    save();
-    renderTable();
-  }
-  function clear(){ data=[]; save(); renderTable(); }
-  function list(){ load(); return data; }
-  function toCSV(){
-    load();
-    const cols = ["ts","fecha","hora","email","role","ip","ua","reason"];
-    const rows = [cols.join(",")].concat(data.map(o=>cols.map(k=>`"${String(o[k]||"").replace(/"/g,'""')}"`).join(",")));
-    return rows.join("\n");
-  }
-  function renderTable(){
-    const tb = document.querySelector("#hist-table tbody");
-    if (!tb) return;
-    load();
-    const rows = data.map((r,idx)=>`<tr>
-      <td>${idx+1}</td>
-      <td>${r.fecha||""}</td>
-      <td>${r.hora||""}</td>
-      <td>${r.email||""}</td>
-      <td>${(r.role||"").toUpperCase()}</td>
-      <td>${r.ip||""}</td>
-      <td title="${r.ua||""}">${(r.ua||"").slice(0,32)}${(r.ua||"").length>32?"…":""}</td>
-    </tr>`).join("");
-    tb.innerHTML = rows || `<tr><td colspan="7" style="text-align:center;color:#999;">Sin registros</td></tr>`;
-  }
-  function bindUI(){
-    const exp = document.getElementById("hist-export");
-    const clr = document.getElementById("hist-clear");
-    const ref = document.getElementById("hist-refresh");
-    exp && exp.addEventListener("click", ()=>{
-      const blob = new Blob([toCSV()], {type:"text/csv;charset=utf-8"});
-      const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-      a.download = "historial_accesos.csv"; a.click(); URL.revokeObjectURL(a.href);
-    });
-    clr && clr.addEventListener("click", ()=>{
-      if(confirm("Vaciar historial local en este dispositivo?")) clear();
-    });
-    ref && ref.addEventListener("click", ()=> renderTable());
-  }
-  function ensureView(){
-    // Render al abrir la vista historial
-    document.addEventListener("click", (e)=>{
-      const btn = e.target.closest('button.tab[data-view="historial"]');
-      if (btn){ setTimeout(renderTable, 50); }
-    });
-  }
-  function init(){ bindUI(); ensureView(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-  return { logAccess, list, toCSV, renderTable };
-})();
-
-// Registrar acceso al cargar página (viewer/owner)
-(function(){ 
-  if (window.AccessLog && AccessLog.logAccess){
-    AccessLog.logAccess("visit");
-  }
-})();
-
-// Hook: cuando haces login exitoso, también loguea
-(function(){
-  const ok = document.getElementById('login-ok');
-  if (ok){
-    ok.addEventListener('click', ()=>{
-      setTimeout(()=>{
-        if (window.AccessLog && AccessLog.logAccess) AccessLog.logAccess("login");
-      }, 300);
-    });
-  }
-})();
-
 })();
 
 // === Control de acceso simple (estático) ===
@@ -245,10 +148,8 @@ const ACCESS = (function(){
     // 1) Tabs restringidos
     const tabReportes = document.querySelector('button.tab[data-view="reportes"]');
     const tabConfig    = document.querySelector('button.tab[data-view="config"]');
-    const tabHist = document.querySelector(\'button.tab[data-view="historial"]\');
     if (tabReportes) tabReportes.style.display = (sess.role==="owner") ? "" : "none";
-    if (tabConfig) tabConfig.style.display = (sess.role==="owner") ? "" : "none";
-    if (tabHist) tabHist.style.display = (sess.role==="owner") ? "" : "none";
+    if (tabConfig) tabConfig.style.display = (sess.role==="owner") ? "" : "none"; // opcional: editores ven Config
 
     // 2) Acciones peligrosas (borrar/exportar masivo) — añade data-guard="owner" en HTML si corresponde
     document.querySelectorAll('[data-guard="owner"]').forEach(el=>{
@@ -451,103 +352,6 @@ if (document.readyState === 'loading') {
 } else {
   protectRestrictedViews();
 }
-
-
-// === Historial de accesos (local en este dispositivo) ===
-window.AccessLog = (function(){
-  const LS_KEY = "access_log_v1";
-  let data = [];
-  function load(){ try{ data = JSON.parse(localStorage.getItem(LS_KEY)||"[]"); }catch(_){ data=[]; } }
-  function save(){ localStorage.setItem(LS_KEY, JSON.stringify(data)); }
-  function nowParts(){
-    const d = new Date();
-    const fecha = d.toLocaleDateString();
-    const hora  = d.toLocaleTimeString();
-    const iso   = d.toISOString();
-    return {fecha, hora, iso};
-  }
-  async function publicIP(){
-    try{ const r = await fetch("https://api.ipify.org?format=json", {cache:"no-store"}); const j = await r.json(); return j.ip||""; }
-    catch(_){ return ""; }
-  }
-  async function logAccess(reason){
-    load();
-    const sess = ACCESS.getSession ? ACCESS.getSession() : {email:null, role:"viewer"};
-    const parts = nowParts();
-    const ua = (navigator.userAgent||"").slice(0,160);
-    let ip = "";
-    try { ip = await publicIP(); } catch(_){ ip=""; }
-    data.push({ts: parts.iso, fecha:parts.fecha, hora:parts.hora, email:sess.email||"", role:sess.role||"viewer", ip, ua, reason: reason||""});
-    save();
-    renderTable();
-  }
-  function clear(){ data=[]; save(); renderTable(); }
-  function list(){ load(); return data; }
-  function toCSV(){
-    load();
-    const cols = ["ts","fecha","hora","email","role","ip","ua","reason"];
-    const rows = [cols.join(",")].concat(data.map(o=>cols.map(k=>`"${String(o[k]||"").replace(/"/g,'""')}"`).join(",")));
-    return rows.join("\n");
-  }
-  function renderTable(){
-    const tb = document.querySelector("#hist-table tbody");
-    if (!tb) return;
-    load();
-    const rows = data.map((r,idx)=>`<tr>
-      <td>${idx+1}</td>
-      <td>${r.fecha||""}</td>
-      <td>${r.hora||""}</td>
-      <td>${r.email||""}</td>
-      <td>${(r.role||"").toUpperCase()}</td>
-      <td>${r.ip||""}</td>
-      <td title="${r.ua||""}">${(r.ua||"").slice(0,32)}${(r.ua||"").length>32?"…":""}</td>
-    </tr>`).join("");
-    tb.innerHTML = rows || `<tr><td colspan="7" style="text-align:center;color:#999;">Sin registros</td></tr>`;
-  }
-  function bindUI(){
-    const exp = document.getElementById("hist-export");
-    const clr = document.getElementById("hist-clear");
-    const ref = document.getElementById("hist-refresh");
-    exp && exp.addEventListener("click", ()=>{
-      const blob = new Blob([toCSV()], {type:"text/csv;charset=utf-8"});
-      const a = document.createElement("a"); a.href = URL.createObjectURL(blob);
-      a.download = "historial_accesos.csv"; a.click(); URL.revokeObjectURL(a.href);
-    });
-    clr && clr.addEventListener("click", ()=>{
-      if(confirm("Vaciar historial local en este dispositivo?")) clear();
-    });
-    ref && ref.addEventListener("click", ()=> renderTable());
-  }
-  function ensureView(){
-    // Render al abrir la vista historial
-    document.addEventListener("click", (e)=>{
-      const btn = e.target.closest('button.tab[data-view="historial"]');
-      if (btn){ setTimeout(renderTable, 50); }
-    });
-  }
-  function init(){ bindUI(); ensureView(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
-  return { logAccess, list, toCSV, renderTable };
-})();
-
-// Registrar acceso al cargar página (viewer/owner)
-(function(){ 
-  if (window.AccessLog && AccessLog.logAccess){
-    AccessLog.logAccess("visit");
-  }
-})();
-
-// Hook: cuando haces login exitoso, también loguea
-(function(){
-  const ok = document.getElementById('login-ok');
-  if (ok){
-    ok.addEventListener('click', ()=>{
-      setTimeout(()=>{
-        if (window.AccessLog && AccessLog.logAccess) AccessLog.logAccess("login");
-      }, 300);
-    });
-  }
-})();
 
 })();
 
