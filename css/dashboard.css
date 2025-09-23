@@ -57,7 +57,7 @@ main{padding:.8rem .9rem 1.2rem}
 .count{color:var(--muted); margin:0 .9rem .4rem}
 .grid{display:grid; gap:1rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); padding:0 .9rem}
 .card{ background: linear-gradient(180deg, #131a2f, #0e1425); border:1px solid #263259; border-radius:16px; padding:.9rem; box-shadow:0 10px 24px rgba(0,0,0,.28) }
-.card .header{display:flex; align-items:center; justify-content:space-between; gap:.6rem}
+.card .header{ position:relative; display:flex; align-items:center; gap:.5rem; }
 .title{font-weight:800; margin:0}
 .badge{display:inline-flex; gap:.35rem; align-items:center; padding:.18rem .5rem; border-radius:999px; font-size:.76rem; background:#14213a; color:#d2e6ff; border:1px solid #30406b}
 .tags{display:flex; flex-wrap:wrap; gap:.3rem; margin-top:.35rem}
@@ -115,9 +115,9 @@ mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
 .card.selected, tr.selected{outline:2px solid #2e7d32; outline-offset:2px; border-radius:.5rem}
 
 /* === Icono de fruto por semilla === */
-.card .header{ position:relative; }
-.fruit-ico{ position:absolute; left:-.25rem; top:-.65rem; width:2.2rem; height:2.2rem; border-radius:999px;
-  display:flex; align-items:center; justify-content:center; font-size:1.2rem;
-  box-shadow:0 6px 18px rgba(0,0,0,.25); background:#143019; border:1px solid #2c5e34; }
+.card .header{ position:relative; display:flex; align-items:center; gap:.5rem; }
+.fruit-ico{ position:static; flex-shrink:0; width:2rem; height:2rem; border-radius:999px; display:flex; align-items:center; justify-content:center; font-size:1.15rem; box-shadow:0 6px 18px rgba(0,0,0,.25); background:#143019; border:1px solid #2c5e34; }
 .fruit-ico-td{ text-align:center; font-size:1.2rem; }
 #seed-table th:nth-child(2), #seed-table td:nth-child(2){ width:42px; }
+
+.card .header .title{ margin:0; line-height:1.2; }
