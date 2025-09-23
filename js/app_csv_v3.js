@@ -3,6 +3,20 @@ const $ = (q,root=document)=>root.querySelector(q);
 const $$ = (q,root=document)=>[...root.querySelectorAll(q)];
 const CSV_URL = "data/seeds.csv"; // Cambia por tu Sheets CSV
 
+
+// === Iconos por semilla (fruto/especie) ===
+const ICONS = {
+  "tomate":"🍅","tomate cherry":"🍅","lechuga":"🥬","aji":"🌶️","ají":"🌶️","pimiento":"🫑","pimentón":"🫑",
+  "cebolla":"🧅","pepino":"🥒","zanahoria":"🥕","brocoli":"🥦","brócoli":"🥦","maiz":"🌽","maíz":"🌽",
+  "ajo":"🧄","papa":"🥔","frutilla":"🍓","acelga":"🥬","espinaca":"🥬","cilantro":"🌿","perejil":"🌿","albahaca":"🌿",
+  "melon":"🍈","melón":"🍈","sandia":"🍉","sandía":"🍉","zapallo":"🎃","zapallito":"🎃","poroto":"🫘","arveja":"🟢",
+  "rabano":"🔴","rábano":"🔴","repollo":"🥬","coliflor":"🥦","apio":"🥬","aloe":"🌵","albahaca morada":"🌿"
+};
+function iconFor(seed){
+  const keys = [seed.name, seed.species, seed.type, (seed.tags||[]).join(' ')].filter(Boolean).join(' ').toLowerCase();
+  for (const k in ICONS){ if(keys.includes(k)) return ICONS[k]; }
+  return "🌱";
+}
 const state = { base: [], overlay: [], filters:{tipo:"",ciclo:"",epoca:"",etiqueta:""}, query:"", readonly:false, table:false };
 
 function loadOverlay(){ try{ state.overlay = JSON.parse(localStorage.getItem("seeds_overlay_v3")||"[]"); }catch{ state.overlay=[]; } }
@@ -123,7 +137,7 @@ function cardTemplate(s){
   const key = makeKey(s);
   return `
   <article class="card">
-    <div class="header"><h3 class="title">${s.name}</h3><span class="badge">${s.germination.days_min}-${s.germination.days_max} días</span></div>
+    <div class=\"header\"><div class=\"fruit-ico\">${iconFor(s)}</div><h3 class=\"title\">${s.name}</h3><span class="badge">${s.germination.days_min}-${s.germination.days_max} días</span></div>
     <p><strong>Especie:</strong> ${s.species||'—'}</p>
     <p><strong>Tipo/Ciclo:</strong> ${s.type||'—'} / ${s.cycle||'—'}</p>
     <p><strong>Época siembra:</strong> ${s.periodo_siembra||'—'}</p>
@@ -151,6 +165,7 @@ function renderTable(items){
     const key = makeKey(s);
     return `<tr>
       <td><button class="btn btn-qr" data-key="${key}">🎯</button></td>
+      <td class="fruit-ico-td">${iconFor(s)}</td>
       <td>${s.name}</td>
       <td>${s.species||''}</td>
       <td>${s.type||''}</td>

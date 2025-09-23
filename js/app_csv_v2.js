@@ -4,6 +4,20 @@ const $$ = (q,root=document)=>[...root.querySelectorAll(q)];
 
 const CSV_URL = "data/seeds.csv"; // Cambia por tu Google Sheets CSV si quieres remoto
 
+
+// === Iconos por semilla (fruto/especie) ===
+const ICONS = {
+  "tomate":"🍅","tomate cherry":"🍅","lechuga":"🥬","aji":"🌶️","ají":"🌶️","pimiento":"🫑","pimentón":"🫑",
+  "cebolla":"🧅","pepino":"🥒","zanahoria":"🥕","brocoli":"🥦","brócoli":"🥦","maiz":"🌽","maíz":"🌽",
+  "ajo":"🧄","papa":"🥔","frutilla":"🍓","acelga":"🥬","espinaca":"🥬","cilantro":"🌿","perejil":"🌿","albahaca":"🌿",
+  "melon":"🍈","melón":"🍈","sandia":"🍉","sandía":"🍉","zapallo":"🎃","zapallito":"🎃","poroto":"🫘","arveja":"🟢",
+  "rabano":"🔴","rábano":"🔴","repollo":"🥬","coliflor":"🥦","apio":"🥬","aloe":"🌵","albahaca morada":"🌿"
+};
+function iconFor(seed){
+  const keys = [seed.name, seed.species, seed.type, (seed.tags||[]).join(' ')].filter(Boolean).join(' ').toLowerCase();
+  for (const k in ICONS){ if(keys.includes(k)) return ICONS[k]; }
+  return "🌱";
+}
 const state = {
   base: [],        // datos cargados del CSV (base)
   overlay: [],     // cambios locales (añadidos o borrados) que persisten en localStorage
@@ -114,7 +128,7 @@ function cardTemplate(s){
   const key = makeKey(s);
   return `
     <article class="card" data-key="${key}">
-      <div class="header">
+      <div class=\"header\"><div class=\"fruit-ico\">${iconFor(s)}</div>
         <h3 class="title">${highlight(s.name, state.query)}</h3>
         <span class="badge">${s.germination.days_min}-${s.germination.days_max} días</span>
       </div>
