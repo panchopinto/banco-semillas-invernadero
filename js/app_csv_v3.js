@@ -131,7 +131,7 @@ function cardTemplate(s){
     <div class="actions">
       <button class="btn btn-detail" data-key="${key}">🔎 Detalle</button>
       <button class="btn btn-qr" data-key="${key}">🎯 QR</button>
-      <button class="btn btn-delete" data-key="${key}">🗑️ Borrar</button>
+      <button class="btn btn-delete" data-guard="owner" data-key="${key}">🗑️ Borrar</button>
     </div>
   </article>`;
 }
@@ -163,7 +163,7 @@ function renderTable(items){
       <td>${s.responsable||''}</td>
       <td>
         <button class="btn btn-detail" data-key="${key}">🔎</button>
-        <button class="btn btn-delete" data-key="${key}">🗑️</button>
+        <button class="btn btn-delete" data-guard="owner" data-key="${key}">🗑️</button>
       </td>
     </tr>`;
   }).join('');
@@ -212,7 +212,12 @@ function copyQR(key){
 }
 
 function onDelete(key){
-  if(state.readonly) return;
+  // Guard de rol (owner-only)
+  try{
+    const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
+    if (sess.role !== 'owner'){ alert("No tienes permiso para borrar semillas."); return; }
+  }catch(e){ alert("Acción no disponible."); return; }
+if(state.readonly) return;
   const s = currentSeeds().find(x=>makeKey(x)===key); if(!s) return;
   if(confirm(`¿Borrar "${s.name}" de esta vista? (no borra tu CSV fuente)`)){
     state.overlay.push({__op:"delete", key}); saveOverlay(); renderAll();

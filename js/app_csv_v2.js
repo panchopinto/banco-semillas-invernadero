@@ -167,6 +167,7 @@ if(state.readonly) return;
   const ok = confirm(`¿Borrar "${s.name}" (${s.species}) de la vista? Esto no elimina tu CSV original.`);
   if(!ok) return;
   state.overlay.push({__op:"delete", key});
+  if(window.SeedRecycleBin && s){ SeedRecycleBin.add(s); }
   saveOverlay();
   render();
 }

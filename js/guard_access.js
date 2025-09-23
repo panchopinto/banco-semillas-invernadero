@@ -19,6 +19,22 @@
   document.addEventListener('copy', (e)=>{
     e.preventDefault();
   });
+
+// === Papelera simple para restaurar borrados ===
+window.SeedRecycleBin = {
+  _deleted: [],
+  add(seed){ this._deleted.push(seed); localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted)); },
+  load(){ try{ this._deleted = JSON.parse(localStorage.getItem("seeds_recycle")||"[]"); }catch(e){ this._deleted=[]; } },
+  list(){ return this._deleted; },
+  restoreLast(){ if(!this._deleted.length){ alert("Papelera vacía."); return; } const s=this._deleted.pop(); 
+    localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted));
+    document.dispatchEvent(new CustomEvent("recycle-restore",{detail:s}));
+    alert("Semilla restaurada: "+(s.name||"sin nombre")); },
+};
+SeedRecycleBin.load();
+// Tecla rápida: Ctrl+Shift+Z = restaurar último
+document.addEventListener("keydown", e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="z"){ SeedRecycleBin.restoreLast(); }});
+
 })();
 
 // === Control de acceso simple (estático) ===
@@ -27,7 +43,19 @@
 
 const ACCESS = (function(){
   const OWNER_EMAIL = "franciscoandresp@gmail.com";
-  const ALLOWLIST = [OWNER_EMAIL, "colega@example.com"]; // <-- Cambia/añade correos aquí
+    const ALLOWLIST = [
+    OWNER_EMAIL,
+    "cesarvilla@liceosannicolas.cl",
+    "ignacioalfaro@liceosannicolas.cl",
+    "pamelaonate@liceosannicolas.cl",
+    "macarenaalvarez@liceosannicolas.cl",
+    "belensegura@liceosannicolas.cl",
+    "lilianpenroz@liceosannicolas.cl",
+    "belenacuna@liceosannicolas.cl",
+    "marlenelipan@liceosannicolas.cl",
+    "diegoacuna@liceosannicolas.cl",
+    "utp.sannicolas@gmail.com"
+  ]; // <-- Cambia/añade correos aquí
   const DEFAULT_CODE = "SEMILLAS-2025"; // <-- Puedes cambiarlo. Sirve como 2FA simple (no subas esta clave pública).
   const LS_KEY= "bsi_access_v1";
 
@@ -193,6 +221,22 @@ const ACCESS = (function(){
   }
 
   return { getSession, applyGuards };
+
+// === Papelera simple para restaurar borrados ===
+window.SeedRecycleBin = {
+  _deleted: [],
+  add(seed){ this._deleted.push(seed); localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted)); },
+  load(){ try{ this._deleted = JSON.parse(localStorage.getItem("seeds_recycle")||"[]"); }catch(e){ this._deleted=[]; } },
+  list(){ return this._deleted; },
+  restoreLast(){ if(!this._deleted.length){ alert("Papelera vacía."); return; } const s=this._deleted.pop(); 
+    localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted));
+    document.dispatchEvent(new CustomEvent("recycle-restore",{detail:s}));
+    alert("Semilla restaurada: "+(s.name||"sin nombre")); },
+};
+SeedRecycleBin.load();
+// Tecla rápida: Ctrl+Shift+Z = restaurar último
+document.addEventListener("keydown", e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="z"){ SeedRecycleBin.restoreLast(); }});
+
 })();
 
 // Listener de integración con app.js (si existe)
