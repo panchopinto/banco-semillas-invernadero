@@ -35,6 +35,64 @@ SeedRecycleBin.load();
 // Tecla rápida: Ctrl+Shift+Z = restaurar último
 document.addEventListener("keydown", e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="z"){ SeedRecycleBin.restoreLast(); }});
 
+
+// === Protección adicional de navegación a vistas restringidas (hash/URL/click) ===
+function protectRestrictedViews(){
+  function blocked(view){
+    try{
+      const sess = ACCESS.getSession();
+      if (view === 'reportes' || view === 'config'){
+        return sess.role !== 'owner';
+      }
+      return false;
+    }catch(e){ return true; }
+  }
+  // Intercepta clicks en tabs
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button.tab[data-view]');
+    if (!btn) return;
+    const view = btn.getAttribute('data-view');
+    if (blocked(view)){
+      e.preventDefault(); e.stopPropagation();
+      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
+    }
+  }, true);
+
+  // Intercepta hashchange (por si alguien navega directo)
+  window.addEventListener('hashchange', ()=>{
+    const h = (location.hash||"").toLowerCase();
+    const view = h.replace(/^#/, '');
+    if (blocked(view)){
+      alert("Acceso restringido: solo OWNER.");
+      // vuelve a una vista segura (tarjetas/lista)
+      const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
+      safe && safe.click();
+      history.replaceState(null, "", "#tarjetas");
+    }
+  });
+
+  // Observa cambios en main por si una app cambia de vista sin hash
+  const mo = new MutationObserver(()=>{
+    // si existe una sección de config o reportes visible, y no eres owner, ocultar
+    const sess = ACCESS.getSession();
+    if (sess.role === 'owner') return;
+    const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
+    if (bad){
+      alert("Acceso restringido: solo OWNER.");
+      const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
+      safe && safe.click();
+    }
+  });
+  mo.observe(document.body, {subtree:true, attributes:true, childList:true});
+}
+
+// Activar protección avanzada al iniciar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', protectRestrictedViews);
+} else {
+  protectRestrictedViews();
+}
+
 })();
 
 // === Control de acceso simple (estático) ===
@@ -91,7 +149,7 @@ const ACCESS = (function(){
     const tabReportes = document.querySelector('button.tab[data-view="reportes"]');
     const tabConfig    = document.querySelector('button.tab[data-view="config"]');
     if (tabReportes) tabReportes.style.display = (sess.role==="owner") ? "" : "none";
-    if (tabConfig)    tabConfig.style.display    = (sess.role!=="viewer") ? "" : "none"; // opcional: editores ven Config
+    if (tabConfig) tabConfig.style.display = (sess.role==="owner") ? "" : "none"; // opcional: editores ven Config
 
     // 2) Acciones peligrosas (borrar/exportar masivo) — añade data-guard="owner" en HTML si corresponde
     document.querySelectorAll('[data-guard="owner"]').forEach(el=>{
@@ -236,6 +294,64 @@ window.SeedRecycleBin = {
 SeedRecycleBin.load();
 // Tecla rápida: Ctrl+Shift+Z = restaurar último
 document.addEventListener("keydown", e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="z"){ SeedRecycleBin.restoreLast(); }});
+
+
+// === Protección adicional de navegación a vistas restringidas (hash/URL/click) ===
+function protectRestrictedViews(){
+  function blocked(view){
+    try{
+      const sess = ACCESS.getSession();
+      if (view === 'reportes' || view === 'config'){
+        return sess.role !== 'owner';
+      }
+      return false;
+    }catch(e){ return true; }
+  }
+  // Intercepta clicks en tabs
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button.tab[data-view]');
+    if (!btn) return;
+    const view = btn.getAttribute('data-view');
+    if (blocked(view)){
+      e.preventDefault(); e.stopPropagation();
+      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
+    }
+  }, true);
+
+  // Intercepta hashchange (por si alguien navega directo)
+  window.addEventListener('hashchange', ()=>{
+    const h = (location.hash||"").toLowerCase();
+    const view = h.replace(/^#/, '');
+    if (blocked(view)){
+      alert("Acceso restringido: solo OWNER.");
+      // vuelve a una vista segura (tarjetas/lista)
+      const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
+      safe && safe.click();
+      history.replaceState(null, "", "#tarjetas");
+    }
+  });
+
+  // Observa cambios en main por si una app cambia de vista sin hash
+  const mo = new MutationObserver(()=>{
+    // si existe una sección de config o reportes visible, y no eres owner, ocultar
+    const sess = ACCESS.getSession();
+    if (sess.role === 'owner') return;
+    const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
+    if (bad){
+      alert("Acceso restringido: solo OWNER.");
+      const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
+      safe && safe.click();
+    }
+  });
+  mo.observe(document.body, {subtree:true, attributes:true, childList:true});
+}
+
+// Activar protección avanzada al iniciar
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', protectRestrictedViews);
+} else {
+  protectRestrictedViews();
+}
 
 })();
 
