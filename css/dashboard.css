@@ -100,3 +100,16 @@ input, textarea, select{background:#0e1425; border:1px solid #273055; color:var(
 .hidden{display:none !important}
 footer.footer{padding:1.2rem; color:var(--muted); text-align:center}
 mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
+
+
+/* === Footer & Access/FAB extras === */
+.site-footer{margin:2rem auto 1rem; padding:1rem; text-align:center; color:#bbb; border-top:1px dashed #2a2a2a; max-width:1200px}
+.site-footer a{color:#9ad}
+
+.pill.small{font-size:.75rem; padding:.15rem .5rem; border:1px solid #333; border-radius:999px; background:#161616}
+.btn.small{font-size:.8rem; padding:.35rem .6rem; border-radius:.6rem; background:#1f1f1f; border:1px solid #333; color:#ddd; cursor:pointer}
+.btn.small:hover{filter:brightness(1.2)}
+
+.fab{position:fixed; right:1rem; bottom:1rem; padding:.8rem 1rem; border-radius:999px; border:0; background:#2e7d32; color:#fff; font-weight:600; box-shadow:0 6px 22px rgba(0,0,0,.35); cursor:pointer}
+.fab:hover{transform:translateY(-1px);}
+.card.selected, tr.selected{outline:2px solid #2e7d32; outline-offset:2px; border-radius:.5rem}

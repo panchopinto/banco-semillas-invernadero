@@ -1,0 +1,214 @@
+
+// === Anti-copia básica (obstaculiza, no es infalible) ===
+(function(){
+  // Bloquea menú contextual
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  // Bloquea arrastre de imágenes
+  document.addEventListener('dragstart', e => { if(e.target && e.target.tagName==='IMG'){ e.preventDefault(); }});
+  // Bloquea combinaciones típicas
+  document.addEventListener('keydown', (e)=>{
+    const k = e.key.toLowerCase();
+    const ctrl = e.ctrlKey || e.metaKey;
+    const shift = e.shiftKey;
+    // F12, Ctrl+Shift+I/C, Ctrl+U, Ctrl+S, Ctrl+P
+    if (k === 'f12' || (ctrl && shift && ['i','c','j'].includes(k)) || (ctrl && ['u','s','p'].includes(k))) {
+      e.preventDefault(); e.stopPropagation();
+    }
+  }, true);
+  // Evita copiar directo
+  document.addEventListener('copy', (e)=>{
+    e.preventDefault();
+  });
+})();
+
+// === Control de acceso simple (estático) ===
+// Nota: Para control real por correo, usa un proveedor de auth (p.ej., Firebase Auth) y reglas de Firestore.
+// Aquí implementamos un "modo propietario/colaborador/visor" con allowlist básica y un "código de acceso".
+
+const ACCESS = (function(){
+  const OWNER_EMAIL = "franciscoandresp@gmail.com";
+  const ALLOWLIST = [OWNER_EMAIL, "colega@example.com"]; // <-- Cambia/añade correos aquí
+  const DEFAULT_CODE = "SEMILLAS-2025"; // <-- Puedes cambiarlo. Sirve como 2FA simple (no subas esta clave pública).
+  const LS_KEY= "bsi_access_v1";
+
+  function roleFromEmail(email){
+    if (!email) return "viewer";
+    if (email.toLowerCase() === OWNER_EMAIL) return "owner";
+    if (ALLOWLIST.map(e=>e.toLowerCase()).includes(email.toLowerCase())) return "editor";
+    return "viewer";
+  }
+
+  function saveSession(sess){ localStorage.setItem(LS_KEY, JSON.stringify(sess)); }
+  function getSession(){
+    try{ return JSON.parse(localStorage.getItem(LS_KEY)||"null") || {email:null, role:"viewer"}; }catch(_){ return {email:null, role:"viewer"}; }
+  }
+  function clear(){ localStorage.removeItem(LS_KEY); applyGuards({email:null, role:"viewer"}); }
+
+  function login(email, code){
+    if (!email) return {ok:false, msg:"Ingresa tu correo"};
+    const role = roleFromEmail(email);
+    if (role==="viewer") return {ok:false, msg:"Correo no autorizado"};
+    // Pide código si no es propietario
+    if (role!=="owner"){
+      if (!code || code !== DEFAULT_CODE) return {ok:false, msg:"Código inválido"};
+    }
+    const sess = {email, role};
+    saveSession(sess);
+    applyGuards(sess);
+    return {ok:true, role};
+  }
+
+  function applyGuards(sess){
+    // 1) Tabs restringidos
+    const tabReportes = document.querySelector('button.tab[data-view="reportes"]');
+    const tabConfig    = document.querySelector('button.tab[data-view="config"]');
+    if (tabReportes) tabReportes.style.display = (sess.role==="owner") ? "" : "none";
+    if (tabConfig)    tabConfig.style.display    = (sess.role!=="viewer") ? "" : "none"; // opcional: editores ven Config
+
+    // 2) Acciones peligrosas (borrar/exportar masivo) — añade data-guard="owner" en HTML si corresponde
+    document.querySelectorAll('[data-guard="owner"]').forEach(el=>{
+      el.style.display = (sess.role==="owner") ? "" : "none";
+      if (sess.role!=="owner") el.disabled = true;
+    });
+    document.querySelectorAll('[data-guard="editor"]').forEach(el=>{
+      el.style.display = (sess.role==="owner"||sess.role==="editor") ? "" : "none";
+      if (!(sess.role==="owner"||sess.role==="editor")) el.disabled = true;
+    });
+
+    // 3) Mostrar email activo en UI
+    const badge = document.getElementById('access-badge');
+    if (badge){
+      badge.textContent = sess.email ? (sess.role.toUpperCase()+" · "+sess.email) : "VISOR";
+    }
+  }
+
+  // Editar solo la semilla seleccionada — botón flotante
+  function setupEditFab(){
+    const fab = document.getElementById('editSelected');
+    if (!fab) return;
+    function updateFab(){
+      const selected = document.querySelector('.card.selected, tr.selected');
+      const sess = getSession();
+      const canEdit = (sess.role==="owner"||sess.role==="editor");
+      fab.style.display = selected && canEdit ? 'inline-flex' : 'none';
+    }
+    document.addEventListener('click', (e)=>{
+      // Marcar selección en tarjetas/filas
+      const card = e.target.closest('.card');
+      const row  = e.target.closest('tr');
+      let changed = false;
+      if (card){
+        document.querySelectorAll('.card.selected').forEach(c=>c.classList.remove('selected'));
+        card.classList.add('selected'); changed = true;
+      }else if (row && row.parentElement && row.parentElement.tagName==='TBODY'){
+        document.querySelectorAll('tr.selected').forEach(r=>r.classList.remove('selected'));
+        row.classList.add('selected'); changed = true;
+      }
+      if (changed) updateFab();
+    });
+    // Intento de editar
+    fab.addEventListener('click', ()=>{
+      const target = document.querySelector('.card.selected, tr.selected');
+      if (!target) return;
+      // Dispara evento custom para que app.js abra el modal de edición si existe
+      const ev = new CustomEvent('request-edit-selected', {detail:{target}});
+      document.dispatchEvent(ev);
+    });
+    // Actualiza al cambiar de vista o render
+    const mo = new MutationObserver(()=>updateFab());
+    mo.observe(document.body, {subtree:true, childList:true, attributes:true});
+  }
+
+  function init(){
+    // Inserta botón de acceso en topbar
+    const topbar = document.querySelector('.topbar');
+    if (topbar && !document.getElementById('access-controls')){
+      const div = document.createElement('div');
+      div.id = 'access-controls';
+      div.style.marginLeft = 'auto';
+      div.innerHTML = `
+        <span id="access-badge" class="pill small" style="margin-right:.5rem;">VISOR</span>
+        <button id="btnLogin" class="btn small">Acceder</button>
+        <button id="btnLogout" class="btn small" style="display:none;">Salir</button>
+      `;
+      topbar.appendChild(div);
+      const btnLogin = div.querySelector('#btnLogin');
+      const btnLogout= div.querySelector('#btnLogout');
+      btnLogin.addEventListener('click', ()=>openLoginModal());
+      btnLogout.addEventListener('click', ()=>{ clear(); btnLogout.style.display='none'; btnLogin.style.display=''; });
+    }
+
+    // Crea modal de login si no existe
+    if (!document.getElementById('login-modal')){
+      const m = document.createElement('div');
+      m.id = 'login-modal';
+      m.style.position='fixed'; m.style.inset='0';
+      m.style.background='rgba(0,0,0,.4)'; m.style.display='none'; m.style.zIndex='9999';
+      m.innerHTML = `
+        <div style="max-width:360px;margin:10vh auto;background:#111;border:1px solid #333;border-radius:16px;padding:16px;">
+          <h3>Acceso restringido</h3>
+          <p>Ingresa tu correo autorizado. (Para colaboradores, se requiere código)</p>
+          <label>Correo<br/><input id="login-email" type="email" style="width:100%"/></label>
+          <label style="display:block;margin-top:.5rem;">Código (colaborador)<br/><input id="login-code" type="password" style="width:100%"/></label>
+          <div style="display:flex;gap:.5rem;justify-content:flex-end;margin-top:1rem;">
+            <button id="login-cancel" class="btn">Cancelar</button>
+            <button id="login-ok" class="btn">Acceder</button>
+          </div>
+        </div>`;
+      document.body.appendChild(m);
+      m.addEventListener('click', (e)=>{ if(e.target.id==='login-modal') m.style.display='none'; });
+      $('#login-cancel')?.addEventListener('click', ()=> m.style.display='none');
+      $('#login-ok')?.addEventListener('click', ()=>{
+        const email = document.getElementById('login-email').value.trim();
+        const code  = document.getElementById('login-code').value.trim();
+        const res = login(email, code);
+        if (!res.ok){ alert(res.msg); return; }
+        document.getElementById('btnLogout').style.display='';
+        document.getElementById('btnLogin').style.display='none';
+        m.style.display='none';
+      });
+    }
+
+    // Botón flotante para "Editar seleccionado"
+    if (!document.getElementById('editSelected')){
+      const b = document.createElement('button');
+      b.id = 'editSelected';
+      b.className = 'fab';
+      b.style.display='none';
+      b.textContent = '✏️ Editar seleccionado';
+      document.body.appendChild(b);
+    }
+
+    applyGuards(getSession());
+    setupEditFab();
+  }
+
+  function openLoginModal(){ document.getElementById('login-modal').style.display='block'; }
+
+  // init al cargar
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return { getSession, applyGuards };
+})();
+
+// Listener de integración con app.js (si existe)
+document.addEventListener('request-edit-selected', (e)=>{
+  // Busca data-id en elemento seleccionado o intenta obtener por título
+  const el = e.detail?.target;
+  let name = el?.querySelector?.('.title')?.textContent?.trim();
+  if (!name && el && el.querySelector) {
+    const firstCell = el.querySelector('td');
+    if (firstCell) name = firstCell.textContent.trim();
+  }
+  if (!name) { alert("No se pudo identificar la semilla seleccionada."); return; }
+  // Si app.js expone una función global para abrir el editor, la usamos:
+  if (window.openSeedEditorByName) {
+    window.openSeedEditorByName(name);
+  } else {
+    alert("Editor no disponible en esta versión.\nSeleccionado: "+name);
+  }
+});
