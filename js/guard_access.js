@@ -369,6 +369,6 @@ document.addEventListener('request-edit-selected', (e)=>{
   if (window.openSeedEditorByName) {
     window.openSeedEditorByName(name);
   } else {
-    alert("Editor no disponible en esta versión.\nSeleccionado: "+name);
+    console.warn("Editor no disponible (legacy hook): "+name);
   }
 });

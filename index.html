@@ -150,7 +150,41 @@
         <label><input type="checkbox" id="readonlyToggle"> Modo solo lectura</label>
       </div>
     </section>
-  </main>
+  
+  <!-- Editor de Semilla -->
+  <div id="seedEditorModal" style="position:fixed; inset:0; display:none; background:rgba(0,0,0,.55); z-index:9999;">
+    <div style="max-width:720px; margin:6vh auto; background:#101010; border:1px solid #2a2a2a; border-radius:16px; padding:16px;">
+      <h2 id="edTitle">Editar semilla</h2>
+      <div class="grid2" style="display:grid; grid-template-columns:1fr 1fr; gap:.75rem;">
+        <label>Nombre<input id="ed_name" type="text"/></label>
+        <label>Especie<input id="ed_species" type="text"/></label>
+        <label>Tipo<input id="ed_type" type="text"/></label>
+        <label>Ciclo<input id="ed_cycle" type="text"/></label>
+        <label>Período siembra<input id="ed_sow" type="text"/></label>
+        <label>Período trasplante<input id="ed_trans" type="text"/></label>
+        <label>Germinación mín (días)<input id="ed_gmin" type="number" min="0"/></label>
+        <label>Germinación máx (días)<input id="ed_gmax" type="number" min="0"/></label>
+        <label>Profundidad<input id="ed_depth" type="text"/></label>
+        <label>Distancia<input id="ed_spacing" type="text"/></label>
+        <label>Riego<input id="ed_watering" type="text"/></label>
+        <label>Ubicación<input id="ed_location" type="text"/></label>
+        <label>Stock<input id="ed_stock" type="number" min="0"/></label>
+        <label>Responsable<input id="ed_resp" type="text"/></label>
+        <label>Curso/Proyecto<input id="ed_curso" type="text"/></label>
+        <label>Uso previsto<input id="ed_uso" type="text"/></label>
+        <label>Interior<input id="ed_indoor" type="checkbox"/></label>
+        <label>Exterior<input id="ed_outdoor" type="checkbox"/></label>
+        <label>Etiquetas (separadas por coma)<input id="ed_tags" type="text"/></label>
+      </div>
+      <div style="display:flex; justify-content:flex-end; gap:.5rem; margin-top:1rem;">
+        <button id="ed_cancel" class="btn">Cancelar</button>
+        <button id="ed_save" class="btn" data-guard="editor">Guardar cambios</button>
+      </div>
+      <p class="muted" style="margin-top:.5rem;">Los cambios se guardan localmente (overlay). No modifican el CSV original.</p>
+    </div>
+  </div>
+
+</main>
 
   <footer class="site-footer">
     <p>Creado por: <strong>Francisco Pinto Aravena</strong> — <a href="mailto:franciscoandresp@gmail.com">franciscoandresp@gmail.com</a><br/>

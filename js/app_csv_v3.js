@@ -25,7 +25,13 @@ function makeKey(s){ return `${s.name}__${s.species}`.toLowerCase(); }
 function currentSeeds(){
   const del = new Set(state.overlay.filter(o=>o.__op==="delete").map(o=>o.key));
   const add = state.overlay.filter(o=>o.__op==="add").map(o=>o.seed);
-  const base = state.base.filter(s=>!del.has(makeKey(s)));
+  const updates = new Map(state.overlay.filter(o=>o.__op==="update").map(o=>[o.key, o.seed]));
+  const base = state.base
+      .filter(s=>!del.has(makeKey(s)))
+      .map(s=>{ 
+        const u = updates.get(makeKey(s));
+        return u ? {...s, ...u} : s;
+      });
   return [...add, ...base];
 }
 
@@ -371,3 +377,101 @@ document.addEventListener('DOMContentLoaded', ()=>{
   setupTabs(); setupSearch(); setupFilters(); setupViewToggle(); setupAddEdit(); setupImport(); setupExport(); setupRefresh(); setupReadonly(); setupBasic();
   loadSeeds();
 });
+
+
+// === Editor de semillas (overlay 'update') ===
+let __ed_key = null;
+function openSeedEditorByName(name){
+  const s = currentSeeds().find(x => (x.name||'').trim().toLowerCase() === String(name||'').trim().toLowerCase());
+  if (!s){ console.warn("Semilla no encontrada:", name); return; }
+  openSeedEditorByKey(makeKey(s));
+}
+function openSeedEditorByKey(key){
+  // Solo owner/editor
+  try{
+    const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
+    if(!(sess.role==='owner'||sess.role==='editor')){ console.warn("Sin permiso para editar"); return; }
+  }catch(e){ return; }
+  __ed_key = key;
+  const s = currentSeeds().find(x=>makeKey(x)===key); if(!s) return;
+  const m = document.getElementById('seedEditorModal'); if(!m) return;
+
+  // Cargar campos
+  document.getElementById('ed_name').value = s.name||'';
+  document.getElementById('ed_species').value = s.species||'';
+  document.getElementById('ed_type').value = s.type||'';
+  document.getElementById('ed_cycle').value = s.cycle||'';
+  document.getElementById('ed_sow').value = s.periodo_siembra||'';
+  document.getElementById('ed_trans').value = s.periodo_trasplante||'';
+  document.getElementById('ed_gmin').value = s.germination?.days_min||0;
+  document.getElementById('ed_gmax').value = s.germination?.days_max||0;
+  document.getElementById('ed_depth').value = s.depth||'';
+  document.getElementById('ed_spacing').value = s.spacing||'';
+  document.getElementById('ed_watering').value = s.watering||'';
+  document.getElementById('ed_location').value = s.location||'';
+  document.getElementById('ed_stock').value = s.stock||0;
+  document.getElementById('ed_resp').value = s.responsable||'';
+  document.getElementById('ed_curso').value = s.curso||'';
+  document.getElementById('ed_uso').value = s.uso||'';
+  document.getElementById('ed_indoor').checked = !!(s.grow && s.grow.indoor);
+  document.getElementById('ed_outdoor').checked = !!(s.grow && s.grow.outdoor);
+  document.getElementById('ed_tags').value = (s.tags||[]).join(", ");
+
+  document.getElementById('edTitle').textContent = "Editar · " + (s.name||"Semilla");
+  m.style.display = 'block';
+}
+function closeSeedEditor(){ const m = document.getElementById('seedEditorModal'); if(m) m.style.display='none'; }
+
+(function bindEditor(){
+  const m = document.getElementById('seedEditorModal');
+  if (!m) return;
+  document.getElementById('ed_cancel').addEventListener('click', closeSeedEditor);
+  document.getElementById('ed_save').addEventListener('click', ()=>{
+    if (!__ed_key) return;
+    const u = {
+      name: document.getElementById('ed_name').value.trim(),
+      species: document.getElementById('ed_species').value.trim(),
+      type: document.getElementById('ed_type').value.trim(),
+      cycle: document.getElementById('ed_cycle').value.trim(),
+      periodo_siembra: document.getElementById('ed_sow').value.trim(),
+      periodo_trasplante: document.getElementById('ed_trans').value.trim(),
+      germination: { 
+        days_min: Number(document.getElementById('ed_gmin').value||0),
+        days_max: Number(document.getElementById('ed_gmax').value||0)
+      },
+      depth: document.getElementById('ed_depth').value.trim(),
+      spacing: document.getElementById('ed_spacing').value.trim(),
+      watering: document.getElementById('ed_watering').value.trim(),
+      location: document.getElementById('ed_location').value.trim(),
+      stock: Number(document.getElementById('ed_stock').value||0),
+      responsable: document.getElementById('ed_resp').value.trim(),
+      curso: document.getElementById('ed_curso').value.trim(),
+      uso: document.getElementById('ed_uso').value.trim(),
+      grow: { 
+        indoor: !!document.getElementById('ed_indoor').checked,
+        outdoor: !!document.getElementById('ed_outdoor').checked
+      },
+      tags: String(document.getElementById('ed_tags').value||'').split(',').map(x=>x.trim()).filter(Boolean)
+    };
+    // Guardar en overlay como update
+    state.overlay.push({__op:"update", key: __ed_key, seed: u});
+    try{ saveOverlay(); }catch(_){}
+    closeSeedEditor();
+    renderAll ? renderAll() : (render && render());
+  });
+})();
+
+// Vincular botón Detalle para abrir el editor directamente si eres owner/editor
+(function wireDetailToEditor(){
+  document.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.btn-detail[data-key]');
+    if (!btn) return;
+    try{
+      const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
+      if (sess.role==='owner' || sess.role==='editor'){
+        e.preventDefault(); e.stopPropagation();
+        openSeedEditorByKey(btn.dataset.key);
+      }
+    }catch(_){}
+  }, true);
+})();
