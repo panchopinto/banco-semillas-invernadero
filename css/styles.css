@@ -1,0 +1,178 @@
+
+:root{--bg:#0b1020;--card:#111827;--ink:#e6f0ff}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:Inter,system-ui,Segoe UI,Roboto,Ubuntu,Arial,sans-serif;background:#0b1020;color:var(--ink)}
+a{color:inherit;text-decoration:none}
+.container{max-width:1200px;margin:0 auto;padding:20px}
+.header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand .logo{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#38bdf8,#8b5cf6);display:grid;place-items:center;box-shadow:0 10px 30px #0007}
+.brand .logo svg{width:26px;height:26px}
+.brand h1{font-size:1.28rem;margin:0}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.55rem;padding:10px 18px;border-radius:14px;font-weight:700;color:#fff;box-shadow:0 6px 18px rgba(0,0,0,.35);transition:transform .18s,box-shadow .18s}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(0,0,0,.45)}
+.btn .ico{width:20px;height:20px}
+.grad-blue{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.grad-green{background:linear-gradient(135deg,#34d399,#10b981)}
+.grad-orange{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.grad-purple{background:linear-gradient(135deg,#c084fc,#8b5cf6)}
+.card{background:var(--card);border:1px solid #223;border-radius:18px;padding:18px;box-shadow:0 12px 30px #0007}
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card.link{display:flex;flex-direction:column;gap:10px;min-height:140px}
+.footer{margin-top:26px;padding:14px 0;border-top:1px solid #1e2741;color:#b8c6e3;text-align:center;opacity:.9}
+.legend{font-size:.92rem;opacity:.9}
+@media (max-width:900px){.cards3{grid-template-columns:1fr}}
+
+/* model-viewer */
+mv-wrapper{display:block;height:70vh;min-height:420px;border-radius:14px;overflow:hidden;border:1px solid #203}
+model-viewer{width:100%;height:100%;background:radial-gradient(600px 400px at 20% 0%,#0f172a 0%,#0b1020 60%,#070b16 100%)}
+.hotspot{background:rgba(15,23,42,.92);color:#fff;border:1px solid #334;padding:6px 10px;border-radius:10px;font-size:.85rem;white-space:nowrap}
+
+
+/* v8: colorful cards with icons + toolbar controls */
+.cards3 .card.link{
+  position:relative; overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+}
+.cards3 .card.link:before{
+  content:""; position:absolute; inset:-2px;
+  background: conic-gradient(from 0deg, #60a5fa, #34d399, #fbbf24, #c084fc, #60a5fa);
+  filter: blur(14px); opacity:.18; z-index:0;
+}
+.cards3 .card.link h3{margin:.2rem 0 0.2rem 0; position:relative; z-index:1}
+.cards3 .card.link p{position:relative; z-index:1}
+.card .chipline{display:flex; gap:8px; flex-wrap:wrap; margin-top:6px; position:relative; z-index:1}
+.chip{padding:6px 10px; border-radius:999px; font-size:.8rem; border:1px solid rgba(255,255,255,.18); opacity:.9}
+.chip.blue{background:rgba(96,165,250,.12)}
+.chip.green{background:rgba(52,211,153,.12)}
+.chip.orange{background:rgba(251,191,36,.12)}
+.chip.purple{background:rgba(192,132,252,.12)}
+
+.toolbar{position:absolute; right:12px; top:12px; display:flex; gap:8px; z-index:5}
+.toolbtn{
+  display:inline-flex; align-items:center; justify-content:center;
+  width:38px; height:38px; border-radius:12px; background:rgba(12,18,32,.9);
+  border:1px solid #2a3550; box-shadow:0 6px 14px rgba(0,0,0,.35);
+  transition: transform .15s;
+}
+.toolbtn:hover{ transform: translateY(-2px); }
+.toolbtn svg{ width:20px; height:20px; }
+.panel{
+  position:relative; z-index:4; margin-top:12px;
+  padding:12px; border-radius:14px; border:1px solid #213; background:rgba(10,16,28,.8);
+}
+.panel h3{margin:0 0 6px 0}
+.badge-inline{display:inline-block; padding:3px 8px; border-radius:8px; font-size:.75rem; border:1px solid rgba(255,255,255,.15); margin-left:6px}
+
+
+/* v10: icon visibility & spacing */
+.btn .ico { width:20px; height:20px; flex:0 0 20px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.25)); }
+.btn { column-gap:.6rem; }
+    
+/* v11: icons inside cards */
+.card-ico{
+  display:inline-grid; place-items:center; width:28px; height:28px; margin-right:8px;
+  border-radius:999px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.12);
+  vertical-align:-6px;
+}
+.card-ico svg{ width:18px; height:18px; display:block; }
+
+/* v12: gradients por tarjeta + iconos en chips */
+.cards3 .card.link.grad-a{background:linear-gradient(135deg, rgba(96,165,250,.14), rgba(59,130,246,.10))}
+.cards3 .card.link.grad-b{background:linear-gradient(135deg, rgba(52,211,153,.14), rgba(16,185,129,.10))}
+.cards3 .card.link.grad-c{background:linear-gradient(135deg, rgba(251,191,36,.14), rgba(245,158,11,.10))}
+.cards3 .card.link .chip .chip-ico{width:14px;height:14px;display:inline-block;vertical-align:-2px;margin-right:6px}
+.cards3 .card.link .chip svg{width:14px;height:14px}
+
+/* v14: badge-style icons for buttons & cards */
+.btn .ico-badge, .card .ico-badge {
+  width:22px; height:22px; display:inline-block;
+  filter: drop-shadow(0 1px 0 rgba(0,0,0,.35));
+}
+.card-ico { background: transparent; border: none; margin-right:10px; }
+.card-ico svg { width:26px; height:26px; }
+.cards3 .card.link.grad-a{ background: linear-gradient(135deg, rgba(147,197,253,.12), rgba(59,130,246,.08)); }
+.cards3 .card.link.grad-b{ background: linear-gradient(135deg, rgba(110,231,183,.12), rgba(16,185,129,.08)); }
+.cards3 .card.link.grad-c{ background: linear-gradient(135deg, rgba(252,211,77,.12), rgba(245,158,11,.08)); }
+
+/* v15: hotspot buttons readability */
+.hotspot { display:inline-flex; align-items:center; gap:6px; }
+.hotspot svg { filter: drop-shadow(0 1px 0 rgba(0,0,0,.35)); }
+
+/* v16: list with inline badges */
+ul.clean li svg { margin-right:6px; }
+ul.clean li { display:flex; align-items:center; gap:6px; }
+ul.clean li strong { margin-right:4px; }
+
+/* v17: AR overlay controls */
+.ar-toolbar {
+  position: fixed; left: 50%; transform: translateX(-50%);
+  bottom: 18px; display: flex; gap: 10px; z-index: 50;
+}
+.ar-btn {
+  width: 48px; height: 48px; border-radius: 14px;
+  display: inline-grid; place-items: center;
+  background: rgba(10,16,28,.92); border: 1px solid #2a3550;
+  box-shadow: 0 8px 22px rgba(0,0,0,.45);
+}
+.ar-btn svg { width: 24px; height: 24px; }
+.ar-help {
+  position: fixed; left: 12px; bottom: 18px; z-index: 50;
+  background: rgba(10,16,28,.92); border:1px solid #2a3550;
+  border-radius: 12px; padding: 10px 12px; max-width: 78vw; display: none;
+  color: #dbeafe; font-size: .9rem;
+}
+.ar-help.show { display: block; }
+@media (min-width: 900px){
+  .ar-toolbar { bottom: 24px; }
+  .ar-help { max-width: 40vw; }
+}
+
+/* v18: placement mode buttons */
+.ar-toolbar .ar-btn.primary { border-color:#2563eb; box-shadow:0 8px 22px rgba(37,99,235,.35); }
+.ar-toolbar .ar-btn.success { border-color:#16a34a; box-shadow:0 8px 22px rgba(22,163,74,.35); }
+    
+/* v21: featured row + tour progress + center button */
+.featured{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:16px}
+@media(max-width:900px){.featured{grid-template-columns:1fr}}
+.card.feature{padding:22px 20px;border:1px solid rgba(255,255,255,.12)}
+.card.feature.grad-g{background:linear-gradient(135deg, rgba(16,185,129,.18), rgba(16,185,129,.08))}
+.card.feature.grad-b{background:linear-gradient(135deg, rgba(59,130,246,.18), rgba(59,130,246,.08))}
+.card.feature h2{margin:.2rem 0 0.4rem 0;display:flex;align-items:center;gap:10px}
+.card.feature p{margin:.2rem 0}
+.progress-pill{position:absolute;left:12px;top:12px;background:rgba(10,16,28,.9);border:1px solid #2a3550;border-radius:999px;padding:6px 10px;font-size:.85rem}
+.progress-bar{height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden;margin-top:8px}
+.progress-bar > span{display:block;height:100%;background:linear-gradient(90deg,#60a5fa,#34d399);width:0%}
+.center-btn{
+  position:absolute; right:12px; top:12px; z-index:5;
+  width:40px;height:40px;border-radius:12px;border:1px solid #2a3550;
+  background:rgba(10,16,28,.92); display:grid; place-items:center;
+  box-shadow:0 6px 16px rgba(0,0,0,.45);
+}
+.center-btn svg{width:20px;height:20px}
+
+/* v29: badges on cards/buttons; toolbar inside viewer; theme icon; toolbar at right */
+.card h3{display:flex;align-items:center;gap:10px}
+.card-ico{display:inline-grid;place-items:center;width:28px;height:28px;border-radius:9px;box-shadow:0 8px 20px rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.14)}
+.card-ico svg{width:18px;height:18px}
+.badge{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:8px;margin-right:6px;border:1px solid rgba(255,255,255,.14);box-shadow:0 6px 16px rgba(0,0,0,.35)}
+.badge svg{width:14px;height:14px}
+.grad-a{background:linear-gradient(135deg,#60a5fa,#3b82f6)}
+.grad-b{background:linear-gradient(135deg,#34d399,#10b981)}
+.grad-c{background:linear-gradient(135deg,#fbbf24,#f59e0b)}
+.grad-d{background:linear-gradient(135deg,#c084fc,#8b5cf6)}
+/* toolbar inside viewer */
+mv-wrapper{position:relative}
+.toolbar{position:absolute; right:12px; top:12px; display:flex; gap:10px; z-index:5}
+.toolbtn{cursor:pointer; width:42px; height:42px; border-radius:14px; display:inline-grid; place-items:center; background:rgba(13,19,33,.78); border:1px solid rgba(80,99,140,.45); box-shadow:0 8px 22px rgba(0,0,0,.45); backdrop-filter: blur(8px); transition: transform .16s ease, background .16s ease, box-shadow .16s ease;}
+.toolbtn:hover{ transform: translateY(-1px); background:rgba(18,26,44,.92); box-shadow:0 10px 26px rgba(0,0,0,.55)}
+.toolbtn:active{ transform: scale(.98)}
+.toolbtn svg{width:22px; height:22px; filter: drop-shadow(0 1px 0 rgba(0,0,0,.35))}
+/* theme icon button */
+.theme-btn{width:42px;height:42px;border-radius:12px;display:inline-grid;place-items:center;border:1px solid rgba(80,99,140,.45);background:rgba(13,19,33,.78);color:#e6f0ff;box-shadow:0 8px 22px rgba(0,0,0,.45);backdrop-filter: blur(8px);}
+.theme-btn svg{width:20px;height:20px}
+/* right-side vertical toolbar on desktop */
+@media (min-width:901px){ .toolbar{ top:50%; right:14px; left:auto; transform:translateY(-50%); flex-direction:column; gap:12px } }
+@media (max-width:900px){ .toolbar{ top:12px; right:12px; transform:none; flex-direction:row; gap:10px } }

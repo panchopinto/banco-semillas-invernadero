@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Vista 3D simple — Oído</title>
+  <link rel="stylesheet" href="css/styles.css"/>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+</head>
+<body>
+  
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="g-blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+    <linearGradient id="g-green" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+    <linearGradient id="g-orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+    <linearGradient id="g-purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="ico-home" viewBox="0 0 24 24"><path fill="url(#g-purple)" d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8z"/></symbol>
+  <symbol id="ico-3d" viewBox="0 0 24 24"><path fill="url(#g-blue)" d="M12 2l9 5v10l-9 5-9-5V7l9-5zm0 2.2L5 7v8l7 3.8 7-3.8V7L12 4.2z"/></symbol>
+  <symbol id="ico-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="url(#g-green)" stroke-width="2"/><path fill="url(#g-green)" d="M11 10h2v7h-2zM11 6h2v2h-2z"/></symbol>
+  <symbol id="ico-ar" viewBox="0 0 24 24"><path fill="url(#g-orange)" d="M12 2l7 4v12l-7 4-7-4V6l7-4zm0 2.2L7 6.5v7l5 2.8 5-2.8v-7L12 4.2z"/></symbol>
+</svg>
+
+
+  
+<!-- v14: Figure icons (badge-like) -->
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="bg-blue" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#93c5fd"/><stop offset="100%" stop-color="#3b82f6"/>
+    </linearGradient>
+    <linearGradient id="bg-green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#6ee7b7"/><stop offset="100%" stop-color="#10b981"/>
+    </linearGradient>
+    <linearGradient id="bg-orange" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#fcd34d"/><stop offset="100%" stop-color="#f59e0b"/>
+    </linearGradient>
+    <linearGradient id="bg-purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c4b5fd"/><stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute">
+  <!-- Home badge (house) -->
+  <symbol id="fig-home" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="28" fill="url(#bg-purple)"/>
+    <path d="M20 34v14h10V38h4v10h10V34h4L32 20 16 34h4z" fill="#fff" opacity="0.95"/>
+  </symbol>
+  <!-- 3D badge (cube) -->
+  <symbol id="fig-3d" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="28" fill="url(#bg-blue)"/>
+    <path d="M32 14l16 9v18l-16 9-16-9V23l16-9zm0 6l-10 5v10l10 5 10-5V25l-10-5z" fill="#fff" opacity="0.95"/>
+  </symbol>
+  <!-- Info badge (book/info) -->
+  <symbol id="fig-info" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="28" fill="url(#bg-green)"/>
+    <path d="M30 18h4v6h-4zM30 28h4v18h-4z" fill="#0b3" opacity="0.0"/>
+    <path d="M32 16a16 16 0 1 0 .001 32.001A16 16 0 0 0 32 16zm-2 8h4v6h-4zm0 10h4v12h-4z" fill="#fff" opacity="0.95"/>
+  </symbol>
+  <!-- AR badge (phone/AR) -->
+  <symbol id="fig-ar" viewBox="0 0 64 64">
+    <circle cx="32" cy="32" r="28" fill="url(#bg-orange)"/>
+    <rect x="20" y="18" width="24" height="28" rx="4" ry="4" fill="#fff" opacity="0.95"/>
+    <path d="M26 24h12v4H26zM24 32h16v2H24zM24 36h16v2H24z" fill="#f59e0b"/>
+  </symbol>
+</svg>
+
+  
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="g-blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#60a5fa"/><stop offset="100%" stop-color="#3b82f6"/></linearGradient>
+    <linearGradient id="g-green" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b981"/></linearGradient>
+    <linearGradient id="g-orange" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient>
+    <linearGradient id="g-purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c084fc"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient>
+  </defs>
+</svg>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="ico-home" viewBox="0 0 24 24"><path fill="url(#g-purple)" d="M12 3l9 8h-3v9h-5v-6h-2v6H6v-9H3l9-8z"/></symbol>
+  <symbol id="ico-3d" viewBox="0 0 24 24"><path fill="url(#g-blue)" d="M12 2l9 5v10l-9 5-9-5V7l9-5zm0 2.2L5 7v8l7 3.8 7-3.8V7L12 4.2z"/></symbol>
+  <symbol id="ico-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="none" stroke="url(#g-green)" stroke-width="2"/><path fill="url(#g-green)" d="M11 10h2v7h-2zM11 6h2v2h-2z"/></symbol>
+  <symbol id="ico-ar" viewBox="0 0 24 24"><path fill="url(#g-orange)" d="M12 2l7 4v12l-7 4-7-4V6l7-4zm0 2.2L7 6.5v7l5 2.8 5-2.8v-7L12 4.2z"/></symbol>
+</svg>
+
+  <div class="container">
+    <header class="header">
+      <div class="brand"><div class="logo"><svg viewBox="0 0 24 24"><use href="#fig-3d"/></svg></div><h1>Vista 3D simple — Oído</h1></div>
+      
+      <nav class="actions">
+        <a class="btn grad-purple" href="index.html"><svg class="ico-badge"><use href="#fig-home"/></svg> Inicio</a>
+        <a class="btn grad-blue" href="scene-simple.html"><svg class="ico-badge"><use href="#fig-3d"/></svg> Vista 3D simple</a>
+        <a class="btn grad-green" href="scene-info.html"><svg class="ico-badge"><use href="#fig-info"/></svg> 3D con información</a>
+        <a class="btn grad-orange" href="ar.html"><svg class="ico-badge"><use href="#fig-ar"/></svg> Realidad Aumentada</a>
+    
+      </nav>
+    
+    </header>
+
+    <section class="card">
+      <div class="center-btn" id="btnCenter" title="Centrar modelo">
+           <svg viewBox="0 0 24 24"><path fill="#60a5fa" d="M12 7a5 5 0 100 10 5 5 0 000-10zm0-5v3M12 19v3M5 12H2M22 12h-3"/></svg>
+         </div>
+         <mv-wrapper>
+        <model-viewer src="assets/models/oido.glb" camera-controls touch-action="pan-y" auto-rotate exposure="1.1" shadow-intensity="0.5"></model-viewer>
+      </mv-wrapper>
+      <p class="legend">Rotar: arrastrar • Zoom: scroll/pinch • Pan: botón derecho/dos dedos.</p>
+    </section>
+
+    <footer class="footer">
+  <small>Proyecto desarrollado por <strong>Belén Acuña</strong> y <strong>Francisco Pinto</strong>. Uso exclusivamente educativo. <strong>Prohibida</strong> su reproducción, copia o distribución total o parcial sin autorización. © 2025</small>
+</footer>
+  </div>
+  
+<script>
+(function(){
+  const block = (e)=>{ e.preventDefault(); e.stopPropagation(); return false; };
+  document.addEventListener('contextmenu', block, {capture:true});
+  document.addEventListener('keydown', function(e){
+    const k = e.key.toLowerCase();
+    if (k === 'f12') return block(e);
+    if (e.ctrlKey && e.shiftKey && ['i','j','c'].includes(k)) return block(e);
+    if (e.ctrlKey && ['u','s','p'].includes(k)) return block(e);
+  }, {capture:true});
+})();
+</script>
+
+
+<script>
+(function(){
+  const mv = document.querySelector('model-viewer');
+  const btn = document.getElementById('btnCenter');
+  btn && btn.addEventListener('click', ()=>{
+    mv.resetTurntableRotation && mv.resetTurntableRotation();
+    mv.cameraOrbit = 'auto auto auto';
+  });
+})();
+</script>
+
+</body>
+</html>
