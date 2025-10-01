@@ -5,16 +5,13 @@
   <!-- OWNER alert suppressor -->
   <script>
   (function(){
-    const __origAlert = window.alert;
+    const _a = window.alert;
     window.alert = function(msg){
       try{
-        var s = (msg||"")+"";
-        if(s.toLowerCase().indexOf("acceso restringido: solo owner") !== -1){
-          // swallow silently on first load
-          return;
-        }
+        var s = (msg||"")+"".toLowerCase();
+        if(s.includes("acceso restringido: solo owner")){ return; }
       }catch(e){}
-      return __origAlert.apply(window, arguments);
+      return _a.apply(window, arguments);
     };
   })();
   </script>
@@ -268,6 +265,6 @@
 
   <script src="js/app_csv_v3.js"></script>
   <script defer src="js/guard_access.js?v=1759325746"></script>
-  <script defer src="js/login_enhancer.js?v=1759347934"></script>
+  <script defer src="js/login_top.js?v=1759348344"></script>
 </body>
 </html>

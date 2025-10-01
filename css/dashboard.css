@@ -173,10 +173,3 @@ input, textarea, select{ padding:.5rem .65rem; border-radius:9px; }
 
 /* Login modal size */
 .login-modal{ min-width:min(92vw, 520px); max-width:560px; max-height:80vh; padding:.6rem; overflow:auto; }
-
-/* Bottom-aligned actions in login */
-.modal-actions{ display:block; margin-top:.8rem; }
-.modal-actions-inner{ display:flex; align-items:center; }
-.modal-actions-inner .spacer{ flex:1; }
-.upper{ text-transform: uppercase; letter-spacing:.5px; }
-.btn.small{ padding:.45rem .7rem; font-size:.82rem; border-radius:10px; }
