@@ -1,6 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
+  <!-- OWNER alert suppressor -->
+  <script>
+  (function(){
+    const __origAlert = window.alert;
+    window.alert = function(msg){
+      try{
+        var s = (msg||"")+"";
+        if(s.toLowerCase().indexOf("acceso restringido: solo owner") !== -1){
+          // swallow silently on first load
+          return;
+        }
+      }catch(e){}
+      return __origAlert.apply(window, arguments);
+    };
+  })();
+  </script>
+
   <meta name="bsi-build" content="f702a83337be"/>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -250,6 +268,6 @@
 
   <script src="js/app_csv_v3.js"></script>
   <script defer src="js/guard_access.js?v=1759325746"></script>
-  <script defer src="js/hotfix-owner.js?v=1759347485"></script>
+  <script defer src="js/login_enhancer.js?v=1759347934"></script>
 </body>
 </html>
