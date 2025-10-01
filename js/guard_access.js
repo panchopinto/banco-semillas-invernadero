@@ -36,10 +36,10 @@ window.SeedRecycleBin = {
   add(seed){ this._deleted.push(seed); localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted)); },
   load(){ try{ this._deleted = JSON.parse(localStorage.getItem("seeds_recycle")||"[]"); }catch(e){ this._deleted=[]; } },
   list(){ return this._deleted; },
-  restoreLast(){ if(!this._deleted.length){ alert("Papelera vacía."); return; } const s=this._deleted.pop(); 
+  restoreLast(){ if(!this._deleted.length){ console.warn("Papelera vacía."); return; } const s=this._deleted.pop(); 
     localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted));
     document.dispatchEvent(new CustomEvent("recycle-restore",{detail:s}));
-    alert("Semilla restaurada: "+(s.name||"sin nombre")); },
+    console.warn("Semilla restaurada: "+(s.name||"sin nombre")); },
 };
 SeedRecycleBin.load();
 // Tecla rápida: Ctrl+Shift+Z = restaurar último
@@ -73,7 +73,7 @@ function protectRestrictedViews(){
     const h = (location.hash||"").toLowerCase();
     const view = h.replace(/^#/, '');
     if (blocked(view)){
-      alert("Acceso restringido: solo OWNER.");
+      console.warn("Acceso restringido: solo OWNER.");
       // vuelve a una vista segura (tarjetas/lista)
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
@@ -88,7 +88,7 @@ function protectRestrictedViews(){
     if (sess.role === 'owner') return;
     const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
     if (bad){
-      alert("Acceso restringido: solo OWNER.");
+      console.warn("Acceso restringido: solo OWNER.");
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
     }
@@ -268,7 +268,7 @@ const ACCESS = (function(){
         const email = document.getElementById('login-email').value.trim();
         const code  = document.getElementById('login-code').value.trim();
         const res = login(email, code);
-        if (!res.ok){ alert(res.msg); return; }
+        if (!res.ok){ console.warn(res.msg); return; }
         document.getElementById('btnLogout').style.display='';
         document.getElementById('btnLogin').style.display='none';
         m.style.display='none';
@@ -306,10 +306,10 @@ window.SeedRecycleBin = {
   add(seed){ this._deleted.push(seed); localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted)); },
   load(){ try{ this._deleted = JSON.parse(localStorage.getItem("seeds_recycle")||"[]"); }catch(e){ this._deleted=[]; } },
   list(){ return this._deleted; },
-  restoreLast(){ if(!this._deleted.length){ alert("Papelera vacía."); return; } const s=this._deleted.pop(); 
+  restoreLast(){ if(!this._deleted.length){ console.warn("Papelera vacía."); return; } const s=this._deleted.pop(); 
     localStorage.setItem("seeds_recycle", JSON.stringify(this._deleted));
     document.dispatchEvent(new CustomEvent("recycle-restore",{detail:s}));
-    alert("Semilla restaurada: "+(s.name||"sin nombre")); },
+    console.warn("Semilla restaurada: "+(s.name||"sin nombre")); },
 };
 SeedRecycleBin.load();
 // Tecla rápida: Ctrl+Shift+Z = restaurar último
@@ -343,7 +343,7 @@ function protectRestrictedViews(){
     const h = (location.hash||"").toLowerCase();
     const view = h.replace(/^#/, '');
     if (blocked(view)){
-      alert("Acceso restringido: solo OWNER.");
+      console.warn("Acceso restringido: solo OWNER.");
       // vuelve a una vista segura (tarjetas/lista)
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
@@ -358,7 +358,7 @@ function protectRestrictedViews(){
     if (sess.role === 'owner') return;
     const bad = document.querySelector('[data-view-active="config"], [data-view-active="reportes"], #view-config:not(.hidden), #view-reportes:not(.hidden)');
     if (bad){
-      alert("Acceso restringido: solo OWNER.");
+      console.warn("Acceso restringido: solo OWNER.");
       const safe = document.querySelector('button.tab[data-view="tarjetas"]') || document.querySelector('button.tab[data-view="tabla"]');
       safe && safe.click();
     }
@@ -384,7 +384,7 @@ document.addEventListener('request-edit-selected', (e)=>{
     const firstCell = el.querySelector('td');
     if (firstCell) name = firstCell.textContent.trim();
   }
-  if (!name) { alert("No se pudo identificar la semilla seleccionada."); return; }
+  if (!name) { console.warn("No se pudo identificar la semilla seleccionada."); return; }
   // Si app.js expone una función global para abrir el editor, la usamos:
   if (window.openSeedEditorByName) {
     window.openSeedEditorByName(name);

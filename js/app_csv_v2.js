@@ -173,8 +173,8 @@ function onDelete(key){
   // Guard de rol (owner-only) usando ACCESS si está disponible
   try {
     const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
-    if (sess.role !== 'owner') { alert("No tienes permiso para borrar semillas."); return; }
-  } catch(e){ /* sin ACCESS => bloquear por defecto */ alert("Acción no disponible."); return; }
+    if (sess.role !== 'owner') { console.warn("No tienes permiso para borrar semillas."); return; }
+  } catch(e){ /* sin ACCESS => bloquear por defecto */ console.warn("Acción no disponible."); return; }
 if(state.readonly) return;
   const s = currentSeeds().find(x=>makeKey(x)===key);
   if(!s) return;
@@ -244,7 +244,7 @@ function setupImport(){
     const rows = parseCSV(text);
     // añadimos como overlay add (no modificamos CSV base)
     rows.forEach(seed=> state.overlay.push({__op:"add", seed}));
-    saveOverlay(); render(); alert(`Importadas ${rows.length} semillas (en memoria).`);
+    saveOverlay(); render(); console.warn(`Importadas ${rows.length} semillas (en memoria).`);
     picker.value = "";
   });
 }

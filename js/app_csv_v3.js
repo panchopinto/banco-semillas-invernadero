@@ -229,15 +229,15 @@ function copyQR(key){
   const s = currentSeeds().find(x=>makeKey(x)===key); if(!s) return;
   const base = location.origin + location.pathname.replace(/\/[^\/]*$/, '/'); // carpeta actual
   const url = s.qr ? s.qr : (base + `?q=${encodeURIComponent(s.name)}`);
-  navigator.clipboard.writeText(url).then(()=> alert("Enlace QR copiado: " + url));
+  navigator.clipboard.writeText(url).then(()=> console.warn("Enlace QR copiado: " + url));
 }
 
 function onDelete(key){
   // Guard de rol (owner-only)
   try{
     const sess = window.ACCESS && ACCESS.getSession ? ACCESS.getSession() : {role:'viewer'};
-    if (sess.role !== 'owner'){ alert("No tienes permiso para borrar semillas."); return; }
-  }catch(e){ alert("Acción no disponible."); return; }
+    if (sess.role !== 'owner'){ console.warn("No tienes permiso para borrar semillas."); return; }
+  }catch(e){ console.warn("Acción no disponible."); return; }
 if(state.readonly) return;
   const s = currentSeeds().find(x=>makeKey(x)===key); if(!s) return;
   if(confirm(`¿Borrar "${s.name}" de esta vista? (no borra tu CSV fuente)`)){
@@ -326,7 +326,7 @@ function setupImport(){
     const text = await file.text();
     const rows = parseCSV(text);
     rows.forEach(seed=> state.overlay.push({__op:"add", seed}));
-    saveOverlay(); renderAll(); alert(`Importadas ${rows.length} semillas (en memoria).`);
+    saveOverlay(); renderAll(); console.warn(`Importadas ${rows.length} semillas (en memoria).`);
     picker.value = "";
   });
 }

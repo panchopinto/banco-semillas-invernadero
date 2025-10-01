@@ -380,7 +380,7 @@ mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
     const s = currentSeeds().find(x=>makeKey(x)===key); if(!s) return;
     const base = location.origin + location.pathname.replace(/\/[^\/]*$/, '/');
     const url = s.qr ? s.qr : (base + `?q=${encodeURIComponent(s.name)}`);
-    navigator.clipboard.writeText(url).then(()=> alert("Enlace QR copiado: " + url));
+    navigator.clipboard.writeText(url).then(()=> console.warn("Enlace QR copiado: " + url));
   }
 
   function onDelete(key){
@@ -460,7 +460,7 @@ mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
       const text = await file.text();
       const rows = parseCSV(text);
       rows.forEach(seed=> state.overlay.push({__op:"add", seed}));
-      saveOverlay(); renderAll(); alert(`Importadas ${rows.length} semillas (en memoria).`);
+      saveOverlay(); renderAll(); console.warn(`Importadas ${rows.length} semillas (en memoria).`);
       picker.value = "";
     });
   }
