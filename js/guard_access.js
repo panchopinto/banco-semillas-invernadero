@@ -225,6 +225,72 @@ const ACCESS = (function(){
     mo.observe(document.body, {subtree:true, childList:true, attributes:true});
   }
 
+
+  // === Login modal (compact, draggable, sticky buttons) ===
+  function openLoginModal(){
+    let dlg = document.getElementById('loginModal');
+    if(!dlg){
+      dlg = document.createElement('dialog');
+      dlg.id = 'loginModal';
+      dlg.innerHTML = `
+        <form method="dialog" class="modal login-modal" novalidate>
+          <header class="modal-header drag-handle"><h3>Acceso restringido</h3></header>
+          <div class="modal-toolbar" role="toolbar">
+            <button type="button" id="btnLoginAccept" class="btn grad-green small upper left-btn">🔓 ACCEDER</button>
+            <button type="button" id="btnLoginCancel" class="btn grad-orange small upper right-btn">✖️ CANCELAR</button>
+          </div>
+          <section class="modal-scroll">
+            <p class="muted">Ingresa tu correo autorizado. (Para colaboradores, se requiere código)</p>
+            <label>Correo<input type="email" id="loginEmail" required placeholder="tu@correo.com"/></label>
+            <label>Código (colaborador)<input type="password" id="loginCode" placeholder="••••••••"/></label>
+            <p class="form-error hidden" id="loginError">Credenciales inválidas.</p>
+          </section>
+          <footer class="modal-actions hidden">
+            <button class="btn ghost" value="cancel">Cancelar</button>
+            <button class="btn grad-green" value="default">Acceder</button>
+          </footer>
+        </form>`;
+      document.body.appendChild(dlg);
+    }
+    // wire buttons
+    const email = dlg.querySelector('#loginEmail');
+    const code  = dlg.querySelector('#loginCode');
+    const err   = dlg.querySelector('#loginError');
+    const btnA  = dlg.querySelector('#btnLoginAccept');
+    const btnC  = dlg.querySelector('#btnLoginCancel');
+    if(btnC) btnC.onclick = ()=> dlg.close();
+    if(btnA) btnA.onclick = ()=>{
+      err.classList.add('hidden');
+      // usa la lógica existente de ACCESS si está disponible
+      try{
+        if(window.ACCESS && ACCESS.login){
+          const ok = ACCESS.login(email.value.trim(), code.value.trim());
+          if(!ok){ err.classList.remove('hidden'); return; }
+        }
+      }catch(e){ console.warn(e); }
+      dlg.close();
+    };
+    // draggable
+    (function(){
+      const header = dlg.querySelector('.drag-handle');
+      if(!header) return;
+      let isDown=false, sx=0, sy=0, sl=0, st=0;
+      header.addEventListener('mousedown', (e)=>{
+        isDown=true;
+        const r = dlg.getBoundingClientRect();
+        sx=e.clientX; sy=e.clientY; sl=r.left; st=r.top;
+        dlg.style.position='fixed'; dlg.style.margin='0';
+      });
+      document.addEventListener('mousemove', (e)=>{
+        if(!isDown) return;
+        dlg.style.left = (sl + e.clientX - sx)+'px';
+        dlg.style.top  = (st + e.clientY - sy)+'px';
+      });
+      document.addEventListener('mouseup', ()=>{ isDown=false; });
+    })();
+    dlg.showModal();
+  }
+
   function init(){
     // Inserta botón de acceso en topbar
     const topbar = document.querySelector('.topbar');
