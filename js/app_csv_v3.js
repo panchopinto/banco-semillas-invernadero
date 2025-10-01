@@ -217,7 +217,7 @@ function openDetail(key){
     <div class="row"><strong>Etiquetas:</strong><span>${(s.tags||[]).join(', ')||'—'}</span></div>
   `;
   $('#detailDrawer').classList.add('open');
-  $('#detailDrawer').setAttribute('aria-hidden','false');
+  $('#detailDrawer').setAttribute('aria-hidden','false'); if(__isLogged()) __enableDetailDrag();
 }
 $('#closeDrawer').addEventListener('click', ()=>{
   $('#detailDrawer').classList.remove('open');
@@ -271,6 +271,33 @@ function __requireLogin(){
   });
   mo.observe(document.body, {childList:true, subtree:true, characterData:true});
 })();
+
+function __enableDetailDrag(){
+  const host = document.querySelector('#detailDrawer .drawer'); if(!host) return;
+  const header = host.querySelector('header'); if(!header) return;
+  let down=false, sx=0, sy=0, sl=0, st=0;
+  header.addEventListener('mousedown', (e)=>{
+    if(!__isLogged()) return;
+    down=true; const r=host.getBoundingClientRect();
+    sx = e.clientX; sy = e.clientY; sl = r.left; st = r.top;
+    host.style.transition='none'; host.style.transform='none';
+    e.preventDefault();
+  });
+  window.addEventListener('mousemove', (e)=>{
+    if(!down) return;
+    let nx = sl + (e.clientX - sx);
+    let ny = st + (e.clientY - sy);
+    // Keep inside viewport margins
+    const pad = 12, w = host.offsetWidth, h = host.offsetHeight;
+    const vw = window.innerWidth, vh = window.innerHeight;
+    nx = Math.min(Math.max(pad, nx), vw - w - pad);
+    ny = Math.min(Math.max(pad, ny), vh - h - pad);
+    host.style.left = nx + 'px';
+    host.style.top  = ny + 'px';
+  });
+  window.addEventListener('mouseup', ()=>{ down=false; });
+}
+
 function setupTabs(){
   $$('.tab').forEach(btn=>btn.addEventListener('click', ()=>{
     $$('.tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
