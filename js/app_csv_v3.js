@@ -280,7 +280,8 @@ function openModal(seed=null){
     f.responsable.value = seed.responsable||""; f.curso.value = seed.curso||""; f.uso.value = seed.uso||"";
   }
   dlg.showModal();
-  $('#btnModalAccept').onclick = (e)=>{
+  const __saveBtn = document.querySelector('#btnModalAccept') || document.querySelector('#saveSeedBtn');
+  __saveBtn.onclick = (e)=>{
     e.preventDefault();
     if(!f.checkValidity()){ $('#formError').classList.remove('hidden'); return; }
     const seedNew = {

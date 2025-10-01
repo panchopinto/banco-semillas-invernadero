@@ -224,10 +224,6 @@
   <dialog id="seedModal">
     <form method="dialog" class="modal" id="seedForm" novalidate>
       <header class="modal-header drag-handle"><h3 id="modalTitle">➕ Semilla</h3></header>
-      <div class="modal-toolbar" role="toolbar">
-        <button type="button" id="btnModalAccept" class="btn grad-green small upper left-btn">✅ ACCEDER</button>
-        <button type="button" id="btnModalCancel" class="btn grad-orange small upper right-btn">✖️ CANCELAR</button>
-      </div>
       <div class="modal-scroll grid-2">
         <label>Nombre<input required name="name" /></label>
         <label>Especie<input name="species" /></label>
@@ -251,7 +247,7 @@
         <label>Curso/Proyecto<input name="curso" /></label>
         <label class="full">Uso previsto<textarea name="uso" rows="2"></textarea></label>
       </div>
-      <footer class="modal-actions hidden">
+      <footer class="modal-actions">
         <button class="btn ghost" value="cancel">Cancelar</button>
         <button class="btn grad-green" id="saveSeedBtn" value="default">Guardar</button>
       </footer>
