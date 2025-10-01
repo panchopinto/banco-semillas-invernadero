@@ -173,3 +173,10 @@ input, textarea, select{ padding:.5rem .65rem; border-radius:9px; }
 
 /* Login modal size */
 .login-modal{ min-width:min(92vw, 520px); max-width:560px; max-height:80vh; padding:.6rem; overflow:auto; }
+
+/* Readonly lock: deshabilita interacción sin alterar el diseño */
+.no-edit #seed-grid .card{ pointer-events:none; cursor:default; }
+.no-edit #seed-grid .card .btn,
+.no-edit #seed-grid .card .btn-detail,
+.no-edit #seed-table .btn,
+.no-edit .toolbar .btn.grad-green { pointer-events:none; }

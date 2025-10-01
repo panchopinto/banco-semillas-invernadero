@@ -377,6 +377,8 @@ function setupReadonly(){
   const t = $('#readonlyToggle'); if(t){ t.addEventListener('change', ()=>{ state.readonly = t.checked; applyReadonly(); }); }
 }
 function applyReadonly(){
+  document.body.classList.toggle('no-edit', !!state.readonly);
+
   $('#addSeedBtn')?.classList.toggle('hidden', state.readonly);
   $$('.btn-delete').forEach(b=>b.classList.toggle('hidden', state.readonly));
 }
