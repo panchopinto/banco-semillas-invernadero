@@ -379,6 +379,22 @@ function setupReadonly(){
 function applyReadonly(){
   document.body.classList.toggle('no-edit', !!state.readonly);
 
+  // Tooltips en modo lectura
+  const nodes = [
+    ...document.querySelectorAll('#seed-grid .card, #seed-grid .card .btn, #seed-table .btn, #addSeedBtn')
+  ];
+  const tip = 'Inicia sesión para editar';
+  nodes.forEach(n=>{
+    if (state.readonly){
+      if(!n.dataset._origTitle){ n.dataset._origTitle = n.getAttribute('title') || ''; }
+      n.setAttribute('title', tip);
+      n.setAttribute('aria-disabled', 'true');
+    }else{
+      if(n.dataset._origTitle !== undefined){ n.setAttribute('title', n.dataset._origTitle); delete n.dataset._origTitle; }
+      n.removeAttribute('aria-disabled');
+    }
+  });
+
   $('#addSeedBtn')?.classList.toggle('hidden', state.readonly);
   $$('.btn-delete').forEach(b=>b.classList.toggle('hidden', state.readonly));
 }
