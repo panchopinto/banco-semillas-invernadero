@@ -245,6 +245,32 @@ if(state.readonly) return;
   }
 }
 
+
+// --- Auth helpers (non-intrusive, work with guard_access.js if present) ---
+function __isLogged(){
+  try{
+    if (window.SeedAuth && typeof SeedAuth.isLogged === 'function' && SeedAuth.isLogged()) return true;
+    if (sessionStorage.getItem('sb_logged') === '1') return true;
+    // Heuristic: owner chip present in header
+    const txt = (document.body.innerText||'').toUpperCase();
+    if (txt.includes('OWNER ·')) return true;
+  }catch(e){}
+  return false;
+}
+function __requireLogin(){
+  if (__isLogged()) return true;
+  try{ if (window.ACCESS && typeof ACCESS.login === 'function'){ ACCESS.login(); } }catch(e){}
+  return false;
+}
+(function __watchOwnerBadge(){
+  const mo = new MutationObserver(()=>{
+    if (__isLogged()){
+      try{ sessionStorage.setItem('sb_logged','1'); }catch(e){}
+      state.readonly = false; applyReadonly();
+    }
+  });
+  mo.observe(document.body, {childList:true, subtree:true, characterData:true});
+})();
 function setupTabs(){
   $$('.tab').forEach(btn=>btn.addEventListener('click', ()=>{
     $$('.tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active');
@@ -309,13 +335,13 @@ function openModal(seed=null){
   };
 }
 function setupAddEdit(){
-  $('#addSeedBtn').addEventListener('click', ()=>openModal(null));
+  $('#addSeedBtn').addEventListener('click', ()=>{ if(!__requireLogin()) return; openModal(null); });
   // Edit from Detail drawer would need an Edit button; for ahora, doble click en título de la tarjeta para editar:
   $('#seed-grid').addEventListener('dblclick', (e)=>{
     const card = e.target.closest('.card'); if(!card) return;
     const key = card.querySelector('.btn-detail')?.dataset.key; if(!key) return;
     const s = currentSeeds().find(x=>makeKey(x)===key);
-    if(s) openModal(s);
+    if(s){ if(!__requireLogin()) return; openModal(s); }
   });
 }
 
@@ -375,7 +401,7 @@ function setupBasic(){
 }
 
 document.addEventListener('DOMContentLoaded', ()=>{
-  setupTabs(); setupSearch(); setupFilters(); setupViewToggle(); setupAddEdit(); setupImport(); setupExport(); setupRefresh(); setupReadonly(); setupBasic();
+  setupTabs(); setupSearch(); setupFilters(); setupViewToggle(); setupAddEdit(); setupImport(); setupExport(); setupRefresh(); setupReadonly(); setupBasic(); state.readonly = !__isLogged(); applyReadonly();
   loadSeeds();
 });
 
