@@ -280,7 +280,7 @@ function openModal(seed=null){
     f.responsable.value = seed.responsable||""; f.curso.value = seed.curso||""; f.uso.value = seed.uso||"";
   }
   dlg.showModal();
-  $('#saveSeedBtn').onclick = (e)=>{
+  $('#btnModalAccept').onclick = (e)=>{
     e.preventDefault();
     if(!f.checkValidity()){ $('#formError').classList.remove('hidden'); return; }
     const seedNew = {
@@ -474,4 +474,31 @@ function closeSeedEditor(){ const m = document.getElementById('seedEditorModal')
       }
     }catch(_){}
   }, true);
+})();
+
+
+// === Modal extras: draggable and fixed header buttons ===
+(function(){
+  const dlg = document.getElementById('seedModal');
+  const header = dlg?.querySelector('.drag-handle');
+  const btnCancel = dlg?.querySelector('#btnModalCancel');
+  if(btnCancel){ btnCancel.addEventListener('click', ()=> dlg.close()); }
+  if(!dlg || !header) return;
+  let isDown=false, startX=0, startY=0, startLeft=0, startTop=0;
+  header.addEventListener('mousedown', (e)=>{
+    isDown = true;
+    const r = dlg.getBoundingClientRect();
+    startX = e.clientX; startY = e.clientY;
+    startLeft = r.left; startTop = r.top;
+    dlg.style.position='fixed';
+  });
+  document.addEventListener('mousemove', (e)=>{
+    if(!isDown) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    dlg.style.left = (startLeft + dx) + 'px';
+    dlg.style.top  = (startTop + dy) + 'px';
+    dlg.style.margin = '0';
+  });
+  document.addEventListener('mouseup', ()=>{ isDown=false; });
 })();

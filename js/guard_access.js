@@ -1,6 +1,16 @@
 
 // === Anti-copia básica (obstaculiza, no es infalible) ===
 (function(){
+  let __ownerWarnShown = sessionStorage.getItem('ownerWarnShown')==='1';
+  function ownerWarn(msg){
+    if(__ownerWarnShown) return; __ownerWarnShown=true; sessionStorage.setItem('ownerWarnShown','1');
+    const t = document.createElement('div');
+    t.className='toast-owner'; t.textContent = msg || 'Acceso restringido: solo OWNER.';
+    Object.assign(t.style,{position:'fixed',top:'12px',right:'12px',padding:'10px 14px',background:'rgba(20,27,52,.95)',color:'#fff',border:'1px solid #2b3a74',borderRadius:'10px',zIndex:9999,boxShadow:'0 6px 18px rgba(0,0,0,.35)'});
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.remove(); }, 3000);
+  }
+
   // Bloquea menú contextual
   document.addEventListener('contextmenu', e => e.preventDefault());
   // Bloquea arrastre de imágenes
@@ -54,7 +64,7 @@ function protectRestrictedViews(){
     const view = btn.getAttribute('data-view');
     if (blocked(view)){
       e.preventDefault(); e.stopPropagation();
-      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
+      ownerWarn("Acceso restringido: solo OWNER.");
     }
   }, true);
 
@@ -100,6 +110,16 @@ if (document.readyState === 'loading') {
 // Aquí implementamos un "modo propietario/colaborador/visor" con allowlist básica y un "código de acceso".
 
 const ACCESS = (function(){
+  let __ownerWarnShown = sessionStorage.getItem('ownerWarnShown')==='1';
+  function ownerWarn(msg){
+    if(__ownerWarnShown) return; __ownerWarnShown=true; sessionStorage.setItem('ownerWarnShown','1');
+    const t = document.createElement('div');
+    t.className='toast-owner'; t.textContent = msg || 'Acceso restringido: solo OWNER.';
+    Object.assign(t.style,{position:'fixed',top:'12px',right:'12px',padding:'10px 14px',background:'rgba(20,27,52,.95)',color:'#fff',border:'1px solid #2b3a74',borderRadius:'10px',zIndex:9999,boxShadow:'0 6px 18px rgba(0,0,0,.35)'});
+    document.body.appendChild(t);
+    setTimeout(()=>{ t.remove(); }, 3000);
+  }
+
   const OWNER_EMAIL = "franciscoandresp@gmail.com";
     const ALLOWLIST = [
     OWNER_EMAIL,
@@ -314,7 +334,7 @@ function protectRestrictedViews(){
     const view = btn.getAttribute('data-view');
     if (blocked(view)){
       e.preventDefault(); e.stopPropagation();
-      alert("Acceso restringido: solo OWNER puede abrir " + view + ".");
+      ownerWarn("Acceso restringido: solo OWNER.");
     }
   }, true);
 

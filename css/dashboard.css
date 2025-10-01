@@ -139,3 +139,21 @@ mark.find{background:#ffc13b55; border-radius:4px; padding:0 .15rem}
   .card .header .title { font-size: 1rem; }
   .fruit-ico-td { font-size: 1.05rem; }
 }
+
+
+/* === Compact & draggable modal improvements === */
+dialog{ max-width: 96vw; }
+.modal{ min-width:min(92vw, 820px); max-height:80vh; padding:.6rem; overflow:auto; }
+@media (max-width: 720px){ .modal{ min-width: 92vw; } }
+.modal-header{ cursor: move; user-select:none; padding:.2rem .4rem; margin-bottom:.4rem; position:sticky; top:0; background: rgba(15,19,36,.9); z-index:3; border-bottom:1px solid #1f2742; }
+.modal-toolbar{ position:sticky; top:2.2rem; display:flex; justify-content:space-between; align-items:center; gap:.5rem; background: rgba(15,19,36,.9); padding:.4rem; z-index:3; border-bottom:1px solid #1f2742; }
+.modal-toolbar .upper{ text-transform: uppercase; letter-spacing:.5px; }
+.modal-toolbar .btn.small{ padding:.45rem .7rem; font-size:.82rem; border-radius:10px; }
+.modal-scroll{ padding-top:.5rem; }
+.grid-2{ grid-template-columns: 1fr 1fr; gap:.55rem; }
+label{ font-size:.9rem; }
+input, textarea, select{ padding:.5rem .65rem; border-radius:9px; }
+
+/* Keep buttons positioned at extremes visually (left/right) */
+.left-btn{ margin-right:auto; }
+.right-btn{ margin-left:auto; }
