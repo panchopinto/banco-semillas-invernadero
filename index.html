@@ -35,6 +35,13 @@
     <div class="actions-right">
       <input id="search" type="search" placeholder="🔎 Buscar por nombre, especie, etiqueta…" aria-label="Buscar" />
       <button class="btn ghost" id="refreshBtn" title="Actualizar desde CSV" aria-label="Actualizar">↻</button>
+      <div class="header-tools">
+        <button class="btn grad-green" id="addSeedBtn">➕ Añadir</button>
+        <input id="filePicker" type="file" accept=".csv,text/csv" hidden>
+        <button class="btn grad-blue" id="importBtn">📥 Importar CSV</button>
+        <button class="btn grad-orange" id="exportBtn">📤 Exportar</button>
+        <button class="btn grad-purple" id="toggleViewBtn">🧭 Tabla</button>
+      </div>
     </div>
   </header>
 
@@ -74,13 +81,6 @@
     <!-- Inventario -->
     <section class="view active" id="view-inventario">
       <div class="toolbar">
-        <div class="left">
-          <button class="btn grad-green" id="addSeedBtn">➕ Añadir</button>
-          <input id="filePicker" type="file" accept=".csv,text/csv" hidden>
-          <button class="btn grad-blue" id="importBtn">📥 Importar CSV</button>
-          <button class="btn grad-orange" id="exportBtn">📤 Exportar</button>
-          <button class="btn grad-purple" id="toggleViewBtn">🧭 Tabla</button>
-        </div>
         <div class="right">
           <div class="filters">
             <select id="filterTipo" aria-label="Filtrar por tipo">
